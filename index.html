@@ -10,17 +10,18 @@
 </head>
 <body>
 
-    <!-- ЭКРАН РУЛЕТКИ (Показывается при старте) -->
+    <!-- ЭКРАН РУЛЕТКИ -->
     <div id="roulette-screen" class="screen active">
         <h1 class="title">Твой стартовый подарок!</h1>
         <div class="roulette-container">
+            <!-- По умолчанию ставим огонь -->
             <img id="roulette-image" src="public/legend_fire.png" alt="Card">
         </div>
         <button id="spin-button" class="spin-btn" onclick="spinRoulette()">КРУТИТЬ</button>
         <button id="claim-button" class="claim-btn hidden" onclick="claimCard()">ЗАБРАТЬ</button>
     </div>
 
-    <!-- ГЛАВНЫЙ ЭКРАН ИГРЫ (Скрыт до конца рулетки) -->
+    <!-- ГЛАВНЫЙ ЭКРАН ИГРЫ -->
     <div id="main-screen" class="screen hidden">
         <div class="game-container">
             <div class="top-bar">
@@ -36,7 +37,6 @@
             </div>
 
             <div class="cards-area">
-                <!-- Сюда мы динамически вставим карту, которая выпала -->
                 <img id="player-card" class="card" src="" alt="My Card">
             </div>
 
