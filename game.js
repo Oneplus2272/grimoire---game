@@ -1,8 +1,6 @@
-// Инициализация Telegram Web App
 let tg = window.Telegram.WebApp;
-tg.expand(); // Разворачиваем на весь экран
+tg.expand();
 
-// Управление модальным окном зданий
 function openBuilding(name, description) {
     if (tg.HapticFeedback) {
         tg.HapticFeedback.impactOccurred('medium');
@@ -27,7 +25,6 @@ function upgradeBuilding() {
     closeModal();
 }
 
-// Переключение вкладок внизу
 function switchTab(tabName, event) {
     if (tg.HapticFeedback) {
         tg.HapticFeedback.selectionChanged();
