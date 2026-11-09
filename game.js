@@ -1,21 +1,14 @@
-// Ждем, пока Telegram загрузится
 if (window.Telegram && window.Telegram.WebApp) {
     const tg = window.Telegram.WebApp;
-
-    // Сначала разворачиваем на максимум
-    tg.expand(); 
+    tg.expand();
     tg.disableVerticalSwipes();
 
-    // Затем запрашиваем НАСТОЯЩИЙ полноэкранный режим (убирает панели)
+    // Пробуем запросить полный экран
     if (tg.requestFullscreen) {
-        tg.requestFullscreen();
+        tg.requestFullscreen().catch((err) => {
+            console.log("Fullscreen failed:", err);
+        });
+    } else {
+        console.log("requestFullscreen not supported on this Telegram version");
     }
-}
-
-function startBattle() {
-    alert('Поиск противника... (Боевая система скоро появится)');
-}
-
-function showCardInfo() {
-    alert('Огненный Демон\nУрон: 8\nHP: 15');
 }
