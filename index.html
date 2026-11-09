@@ -5,42 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Grimoire Game</title>
     
-    <!-- Подключаем наш скрипт для Telegram -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- Подключаем наши стили -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="game-container">
-        
-        <!-- Верхняя панель -->
-        <div class="top-bar">
-            <div class="profile">
-                <div class="avatar">👤</div>
-                <span>Архимаг</span>
-            </div>
-            <div class="resources">
-                <span>🪙 1000</span>
-                <span>💜 500</span>
-                <span>💎 10</span>
-            </div>
+    <!-- ЭКРАН РУЛЕТКИ (Показывается при старте) -->
+    <div id="roulette-screen" class="screen active">
+        <h1 class="title">Твой стартовый подарок!</h1>
+        <div class="roulette-container">
+            <img id="roulette-image" src="public/legend_fire.png" alt="Card">
         </div>
-
-        <!-- Колода -->
-        <div class="cards-area">
-            <div class="card card-fire" onclick="showCardInfo()"></div>
-        </div>
-
-        <!-- Кнопка -->
-        <div class="bottom-bar">
-            <button class="attack-button" onclick="startBattle()">ATTACK</button>
-        </div>
-
+        <button id="spin-button" class="spin-btn" onclick="spinRoulette()">КРУТИТЬ</button>
+        <button id="claim-button" class="claim-btn hidden" onclick="claimCard()">ЗАБРАТЬ</button>
     </div>
 
-    <!-- Подключаем нашу логику -->
+    <!-- ГЛАВНЫЙ ЭКРАН ИГРЫ (Скрыт до конца рулетки) -->
+    <div id="main-screen" class="screen hidden">
+        <div class="game-container">
+            <div class="top-bar">
+                <div class="profile">
+                    <div class="avatar">👤</div>
+                    <span>Архимаг</span>
+                </div>
+                <div class="resources">
+                    <span>🪙 1000</span>
+                    <span>💜 500</span>
+                    <span>💎 10</span>
+                </div>
+            </div>
+
+            <div class="cards-area">
+                <!-- Сюда мы динамически вставим карту, которая выпала -->
+                <img id="player-card" class="card" src="" alt="My Card">
+            </div>
+
+            <div class="bottom-bar">
+                <button class="attack-button" onclick="startBattle()">ATTACK</button>
+            </div>
+        </div>
+    </div>
+
     <script src="game.js"></script>
 </body>
 </html>
