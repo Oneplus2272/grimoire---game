@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grimoire: Duel of Souls</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a0b2e; /* Темно-фиолетовый фон */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .game-container {
+            text-align: center;
+            background: url('https://i.imgur.com/your_background_image.jpg') no-repeat center center/cover; /* Сюда потом вставим наш фон */
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #8a2be2;
+        }
+        .resources {
+            display: flex;
+            gap: 15px;
+        }
+        .attack-button {
+            background: linear-gradient(180deg, #ff3333, #8b0000);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            border: 3px solid #ffcc00;
+            border-radius: 15px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            transition: transform 0.1s;
+        }
+        .attack-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Верхняя панель -->
+        <div class="player-info">
+            <div class="avatar">👤 Архимаг</div>
+            <div class="resources">
+                <span>🪙 1000</span>
+                <span>💜 500</span>
+                <span>💎 10</span>
+            </div>
+        </div>
+
+        <!-- Центральная часть (пока пустая, тут будет магия) -->
+        <div class="center-area">
+            <h1>Grimoire</h1>
+        </div>
+
+        <!-- Нижняя панель -->
+        <div class="bottom-area">
+            <button class="attack-button" onclick="alert('Поиск противника... (Пока в разработке)')">ATTACK</button>
+        </div>
+    </div>
+</body>
+</html>
