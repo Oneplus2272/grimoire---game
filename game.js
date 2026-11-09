@@ -1,15 +1,21 @@
-// Разворачиваем игру на весь экран при загрузке
+// Ждем, пока Telegram загрузится
 if (window.Telegram && window.Telegram.WebApp) {
-    window.Telegram.WebApp.expand();
-    window.Telegram.WebApp.disableVerticalSwipes();
+    const tg = window.Telegram.WebApp;
+
+    // Сначала разворачиваем на максимум
+    tg.expand(); 
+    tg.disableVerticalSwipes();
+
+    // Затем запрашиваем НАСТОЯЩИЙ полноэкранный режим (убирает панели)
+    if (tg.requestFullscreen) {
+        tg.requestFullscreen();
+    }
 }
 
-// Функция для кнопки Атака
 function startBattle() {
     alert('Поиск противника... (Боевая система скоро появится)');
 }
 
-// Функция для клика по карте
 function showCardInfo() {
     alert('Огненный Демон\nУрон: 8\nHP: 15');
 }
