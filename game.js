@@ -4,7 +4,7 @@ if (window.Telegram && window.Telegram.WebApp) {
     tg.disableVerticalSwipes();
 }
 
-// Список наших карт
+// Все карты строго в .png
 const cards = [
     "public/legend_fire.png",
     "public/legend_ice.png",
@@ -15,7 +15,6 @@ let winningCard = "";
 let spinInterval;
 let isSpinning = false;
 
-// Функция для запуска рулетки
 function spinRoulette() {
     if (isSpinning) return;
     isSpinning = true;
@@ -23,40 +22,32 @@ function spinRoulette() {
     document.getElementById('spin-button').classList.add('hidden');
     const imageElement = document.getElementById('roulette-image');
     
-    let counter = 0;
-    // Крутим картинки очень быстро
+    // Мелькание карт
     spinInterval = setInterval(() => {
-        // Берем случайную карту из списка для мелькания
         const randomIndex = Math.floor(Math.random() * cards.length);
-        imageElement.src = cards[randomIndex];
-        counter++;
-    }, 50); // Каждые 50 миллисекунд
+        // Добавляем таймстамп, чтобы браузер перерисовывал
+        imageElement.src = cards[randomIndex] + "?t=" + new Date().getTime();
+    }, 50);
 
-    // Через 3 секунды (3000 мс) останавливаем
+    // Остановка через 3 сек
     setTimeout(() => {
         clearInterval(spinInterval);
         isSpinning = false;
         
-        // Выбираем финальную карту-победителя
         const finalIndex = Math.floor(Math.random() * cards.length);
         winningCard = cards[finalIndex];
-        imageElement.src = winningCard;
+        imageElement.src = winningCard + "?t=" + new Date().getTime();
 
-        // Показываем кнопку "Забрать"
         document.getElementById('claim-button').classList.remove('hidden');
     }, 3000);
 }
 
-// Функция для забора карты
 function claimCard() {
     document.getElementById('roulette-screen').classList.add('hidden');
     document.getElementById('main-screen').classList.remove('hidden');
-    
-    // Ставим выигранную карту на главный экран
     document.getElementById('player-card').src = winningCard;
 }
 
-// Функция атаки (пока заглушка)
 function startBattle() {
     alert('Поиск противника... (Боевая система скоро появится)');
 }
