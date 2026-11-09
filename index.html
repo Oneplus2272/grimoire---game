@@ -2,48 +2,65 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Grimoire Game</title>
-    
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dark Strategy TMA</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Подключаем Telegram Web App API -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 
-    <!-- ЭКРАН РУЛЕТКИ -->
-    <div id="roulette-screen" class="screen active">
-        <h1 class="title">Твой стартовый подарок!</h1>
-        <div class="roulette-container">
-            <img id="roulette-image" src="public/legend_fire.png" alt="Card">
+    <!-- Верхняя панель ресурсов -->
+    <header class="top-bar">
+        <div class="player-info">
+            <span class="avatar">👑</span>
+            <span class="level">Ур. 12</span>
         </div>
-        <button id="spin-button" class="spin-btn" onclick="spinRoulette()">КРУТИТЬ</button>
-        <button id="claim-button" class="claim-btn hidden" onclick="claimCard()">ЗАБРАТЬ</button>
-    </div>
+        <div class="resources">
+            <div class="res-item">🪵 <span id="wood">3.2M</span></div>
+            <div class="res-item">⛏️ <span id="iron">2.5M</span></div>
+            <div class="res-item">🪙 <span id="gold">480K</span></div>
+        </div>
+    </header>
 
-    <!-- ГЛАВНЫЙ ЭКРАН ИГРЫ -->
-    <div id="main-screen" class="screen hidden">
-        <div class="game-container">
-            <div class="top-bar">
-                <div class="profile">
-                    <div class="avatar">👤</div>
-                    <span>Архимаг</span>
-                </div>
-                <div class="resources">
-                    <span>🪙 1000</span>
-                    <span>💜 500</span>
-                    <span>💎 10</span>
-                </div>
+    <!-- Игровое поле (База / Замок) -->
+    <main class="game-container">
+        <div class="fortress-view">
+            <div class="building citadel" onclick="openBuilding('Цитадель', 'Главный бастион империи. Повышает лимит уровня построек.')">
+                <span class="b-name">Цитадель</span>
+                <span class="b-lvl">Ур. 12</span>
             </div>
-
-            <div class="cards-area">
-                <img id="player-card" class="card" src="" alt="My Card">
+            <div class="building barracks" onclick="openBuilding('Казарма', 'Здесь тренируются воины и пехота для защиты и походов.')">
+                <span class="b-name">Казарма</span>
+                <span class="b-lvl">Ур. 10</span>
             </div>
-
-            <div class="bottom-bar">
-                <button class="attack-button" onclick="startBattle()">ATTACK</button>
+            <div class="building mine" onclick="openBuilding('Железный Рудник', 'Добывает железо для постройки армии и стен.')">
+                <span class="b-name">Рудник</span>
+                <span class="b-lvl">Ур. 9</span>
             </div>
         </div>
+    </main>
+
+    <!-- Модальное окно для апгрейда зданий -->
+    <div id="buildingModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="modalTitle">Здание</h2>
+            <p id="modalDesc">Описание здания...</p>
+            <div class="modal-actions">
+                <button class="upgrade-btn" onclick="upgradeBuilding()">Улучшить ⬆️</button>
+                <button class="close-btn" onclick="closeModal()">Закрыть</button>
+            </div>
+        </div>
     </div>
+
+    <!-- Нижняя панель навигации -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" onclick="switchTab('castle', event)">🏰 Замок</button>
+        <button class="nav-btn" onclick="switchTab('map', event)">🗺️ Мир</button>
+        <button class="nav-btn" onclick="switchTab('army', event)">⚔️ Походы</button>
+        <button class="nav-btn" onclick="switchTab('clan', event)">🛡️ Клан</button>
+        <button class="nav-btn" onclick="switchTab('settings', event)">⚙️ Настройки</button>
+    </nav>
 
     <script src="game.js"></script>
 </body>
