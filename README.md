@@ -1,1 +1,1 @@
-# grimoire---game
+# grimoire-game
