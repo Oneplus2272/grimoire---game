@@ -12,6 +12,81 @@ body {
   overflow: hidden;
 }
 
+/* --- СТИЛИ ДЛЯ РУЛЕТКИ --- */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #0d0614;
+    background-image: url('public/background.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 100;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.title {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+    text-align: center;
+}
+
+.roulette-container {
+    width: 200px;
+    height: 300px;
+    position: relative;
+    margin-bottom: 40px;
+}
+
+#roulette-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+}
+
+.spin-btn, .claim-btn {
+    padding: 15px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.spin-btn {
+    background: linear-gradient(180deg, #8a2be2, #4b0082);
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+}
+
+.claim-btn {
+    background: linear-gradient(180deg, #00ff00, #008000);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+}
+
+.spin-btn:active, .claim-btn:active {
+    transform: scale(0.95);
+}
+
+/* --- СТИЛИ ДЛЯ ГЛАВНОГО ЭКРАНА --- */
+#main-screen {
+    z-index: 10;
+}
+
 .game-container {
   width: 100vw;
   height: 100vh;
@@ -19,7 +94,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  background-image: url('background.jpg'); 
+  background-image: url('public/background.jpg'); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -77,22 +152,15 @@ body {
 }
 
 .card {
-  width: 110px;
-  height: 160px;
-  border-radius: 10px;
-  transition: transform 0.2s;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  width: 160px;
+  height: 240px;
+  object-fit: contain;
   cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .card:active {
   transform: scale(0.95);
-}
-
-.card-fire {
-  background-image: url('card_fire.jpg'); 
 }
 
 .bottom-bar {
