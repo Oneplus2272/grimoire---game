@@ -26,8 +26,8 @@
             flex-direction: column;
             justify-content: space-between;
             position: relative;
-            /* Сюда мы ставим наш сгенерированный фон */
-            background-image: url('background.jpg'); 
+            /* ТУТ ФОН: обращаем внимание на .png */
+            background-image: url('background.png'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -82,7 +82,6 @@
             gap: 10px;
             flex-grow: 1;
             padding: 20px;
-            /* Сдвигаем карты чуть ниже, чтобы не перекрывать фон */
             margin-top: 50px; 
         }
 
@@ -97,8 +96,8 @@
             display: flex;
             flex-direction: column;
             transition: transform 0.2s;
-            /* Сюда мы ставим нашу карту */
-            background-image: url('card_fire.jpg'); 
+            /* ТУТ КАРТА: обращаем внимание на .png */
+            background-image: url('card_fire.png'); 
             background-size: cover;
             background-position: center;
         }
@@ -153,7 +152,7 @@
             </div>
         </div>
 
-        <!-- Твоя колода (пока только 1 карта) -->
+        <!-- Твоя колода -->
         <div class="cards-area">
             <div class="card" onclick="alert('Это Огненный Демон! Урон: 8, HP: 15')"></div>
         </div>
@@ -166,7 +165,6 @@
 
     <script>
         function startBattle() {
-            // Пока просто заглушка
             alert('Поиск противника в сети... (Боевая система в разработке)');
         }
     </script>
