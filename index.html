@@ -2,31 +2,16 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Grimoire Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dark Cavern RPG</title>
+    <!-- Подключаем скрипт Telegram Mini App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="ui-panel">
-        <h2>🏰 Grimoire Strategy</h2>
-        <div class="resources">
-            <span>🪙 Золото: <span id="goldCount">100</span></span>
-        </div>
-        <div class="controls">
-            <select id="buildingType">
-                <option value="1">🪙 Шахта (+10 золота)</option>
-                <option value="2">🔮 Башня магов</option>
-            </select>
-        </div>
-    </div>
+    <canvas id="game-canvas"></canvas>
 
-    <!-- Холст для большой карты -->
-    <div class="canvas-container">
-        <canvas id="gameCanvas"></canvas>
-    </div>
-
-    <script src="game.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
