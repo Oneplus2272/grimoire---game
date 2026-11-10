@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Grimoire Game</title>
-    <!-- Официальный скрипт Telegram Mini App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -23,8 +22,9 @@
         </div>
     </div>
 
-    <div class="isometric-container">
-        <div class="grid" id="gameGrid"></div>
+    <!-- Холст для большой карты -->
+    <div class="canvas-container">
+        <canvas id="gameCanvas"></canvas>
     </div>
 
     <script src="game.js"></script>
