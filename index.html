@@ -3,60 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Dark Strategy TMA</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Grimoire Game</title>
+    <!-- Официальный скрипт Telegram Mini App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header class="top-bar">
-        <div class="player-info">
-            <span class="avatar">👑</span>
-            <span class="level">Ур. 12</span>
-        </div>
+    <div class="ui-panel">
+        <h2>🏰 Grimoire Strategy</h2>
         <div class="resources">
-            <div class="res-item">🪵 <span id="wood">3.2M</span></div>
-            <div class="res-item">⛏️ <span id="iron">2.5M</span></div>
-            <div class="res-item">🪙 <span id="gold">480K</span></div>
+            <span>🪙 Золото: <span id="goldCount">100</span></span>
         </div>
-    </header>
-
-    <!-- Игровое поле со скроллом -->
-    <main class="game-container">
-        <div class="map-world">
-            <div class="building citadel" onclick="openBuilding('Главный Замок', 'Серверная цитадель. Управляет всей империей.')">
-                <span class="b-name">🏰 Замок</span>
-                <span class="b-lvl">Ур. 12</span>
-            </div>
-            <div class="building barracks" onclick="openBuilding('Казарма', 'Тренировочные лагеря для легионов.')">
-                <span class="b-name">⚔️ Казарма</span>
-                <span class="b-lvl">Ур. 10</span>
-            </div>
-            <div class="building mine" onclick="openBuilding('Рудник', 'Богатые жилы в скалах для добычи ресурсов.')">
-                <span class="b-name">⛏️ Рудник</span>
-                <span class="b-lvl">Ур. 9</span>
-            </div>
-        </div>
-    </main>
-
-    <div id="buildingModal" class="modal hidden">
-        <div class="modal-content">
-            <h2 id="modalTitle">Здание</h2>
-            <p id="modalDesc">Описание...</p>
-            <div class="modal-actions">
-                <button class="upgrade-btn" onclick="upgradeBuilding()">Улучшить ⬆️</button>
-                <button class="close-btn" onclick="closeModal()">Закрыть</button>
-            </div>
+        <div class="controls">
+            <select id="buildingType">
+                <option value="1">🪙 Шахта (+10 золота)</option>
+                <option value="2">🔮 Башня магов</option>
+            </select>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <button class="nav-btn active" onclick="switchTab('castle', event)">🏰 Замок</button>
-        <button class="nav-btn" onclick="switchTab('map', event)">🗺️ Мир</button>
-        <button class="nav-btn" onclick="switchTab('army', event)">⚔️ Походы</button>
-        <button class="nav-btn" onclick="switchTab('clan', event)">🛡️ Клан</button>
-        <button class="nav-btn" onclick="switchTab('settings', event)">⚙️ Настройки</button>
-    </nav>
+    <div class="isometric-container">
+        <div class="grid" id="gameGrid"></div>
+    </div>
 
     <script src="game.js"></script>
 </body>
