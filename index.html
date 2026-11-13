@@ -2,16 +2,27 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Мой Питомец</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- Подключаем стили (добавил ?v=2 чтобы сбросить кеш) -->
+  <link rel="stylesheet" href="style.css?v=2">
+  <!-- Скрипт Telegram -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div class="app">
-    <h1>Монеты: <span id="coins">0</span></h1>
-    <button id="tapBtn">Тапнуть</button>
+    <!-- Блок с монетами (будет сверху) -->
+    <header class="top-bar">
+      <h1>Монеты: <span id="coins">0</span></h1>
+    </header>
+
+    <!-- Блок с кнопкой (будет по центру) -->
+    <main class="main-content">
+      <button id="tapBtn">Тапнуть</button>
+    </main>
   </div>
-  <script src="game.js"></script>
+  
+  <!-- Подключаем логику (добавил ?v=2 чтобы сбросить кеш) -->
+  <script src="game.js?v=2"></script>
 </body>
 </html>
