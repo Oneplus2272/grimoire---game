@@ -23,7 +23,7 @@ body {
 }
 
 .top-bar {
-  padding: 15px;
+  padding: 10px 15px; /* Немного уменьшил отступ, чтобы влезло две строки */
   text-align: center;
   background: rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid #2ea6ff;
@@ -33,6 +33,12 @@ body {
 .top-bar h1 {
   font-size: 26px;
   font-weight: bold;
+}
+
+.income-text {
+  font-size: 14px;
+  color: #8e9fae;
+  margin-top: 5px;
 }
 
 .main-content {
@@ -49,13 +55,12 @@ body {
   display: none !important;
 }
 
-/* --- Питомец (Кибер-Кот) --- */
+/* --- Питомец --- */
 .pet-container {
   margin-bottom: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Свечение вокруг кота в цвет кнопки */
   filter: drop-shadow(0 0 15px rgba(46, 166, 255, 0.4));
 }
 
@@ -66,20 +71,8 @@ body {
   transition: transform 0.1s ease;
 }
 
-/* Класс для прыжка */
 .pet-jump {
   transform: translateY(-20px) scale(1.1);
-}
-
-/* Класс для радости (когда что-то купил) */
-.pet-happy {
-  animation: happySpin 0.5s ease;
-}
-
-@keyframes happySpin {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(10deg) scale(1.15); }
-  100% { transform: rotate(0deg) scale(1); }
 }
 
 /* --- Кнопка --- */
@@ -111,14 +104,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   border: 1px solid #2ea6ff;
 }
 
 .shop-info h3 { font-size: 20px; margin-bottom: 5px; }
 .shop-info p { color: #8e9fae; font-size: 14px; }
 
-#buyPowerBtn {
+#buyPowerBtn, #buyAutoBtn {
   background: #31a24c;
   color: white;
   border: none;
@@ -129,16 +122,16 @@ body {
   cursor: pointer;
 }
 
-#buyPowerBtn:disabled {
+#buyPowerBtn:disabled, #buyAutoBtn:disabled {
   background: #4a5b6b;
   color: #8e9fae;
   cursor: not-allowed;
 }
 
 .stats {
-  font-size: 18px;
+  font-size: 16px;
   color: #2ea6ff;
-  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 /* --- Нижняя навигация --- */
