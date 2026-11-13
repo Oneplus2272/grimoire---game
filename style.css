@@ -6,7 +6,7 @@
 
 body {
   font-family: sans-serif;
-  background-color: #17212b; /* Базовый фон для магазина и рейтинга */
+  background-color: #17212b;
   color: white;
   height: 100vh;
   width: 100vw;
@@ -15,7 +15,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Скрываем интерфейс в бою */
 body.hide-ui .top-bar,
 body.hide-ui .bottom-nav {
   display: none !important;
@@ -53,7 +52,7 @@ body.hide-ui .bottom-nav {
   position: relative;
 }
 
-/* Фон главного экрана */
+/* Твой фон для главного экрана */
 #screen-game {
   background-image: url('./public/main_bg.png');
   background-size: cover;
@@ -61,7 +60,7 @@ body.hide-ui .bottom-nav {
   background-repeat: no-repeat;
 }
 
-/* Фон экрана боя */
+/* Твой фон для боя */
 #screen-battle {
   background-image: url('./public/bg.png');
   background-size: cover;
@@ -88,7 +87,7 @@ body.hide-ui .bottom-nav {
   box-shadow: 0 6px 0 #b83333;
   margin-bottom: 40px;
   transition: transform 0.1s;
-  z-index: 10; /* Чтобы кнопка была над фоном */
+  z-index: 10;
 }
 .battle-btn:active { transform: translateY(6px); box-shadow: none; }
 
