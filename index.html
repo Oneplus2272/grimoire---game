@@ -4,14 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Кибер-Кот RPG</title>
-  <link rel="stylesheet" href="style.css?v=21">
+  <link rel="stylesheet" href="style.css?v=22">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div class="app">
+    <!-- НОВАЯ ШАПКА -->
     <header class="top-bar">
-      <h1>Монеты: <span id="coins">0</span></h1>
-      <p class="income-text">В секунду: <span id="income">0</span></p>
+      <div class="resource-panel">
+        <img src="./public/icon_coin.png" alt="Монеты" class="coin-icon">
+        <span id="coins">0</span>
+      </div>
+      <div class="resource-panel small-panel">
+        <span class="plus">+</span>
+        <span id="income">0</span>
+        <span class="per-sec">/сек</span>
+      </div>
     </header>
 
     <main class="main-content" id="screen-game">
@@ -104,6 +112,6 @@
     </nav>
   </div>
   
-  <script src="game.js?v=21"></script>
+  <script src="game.js?v=22"></script>
 </body>
 </html>
