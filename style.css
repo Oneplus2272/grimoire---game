@@ -1,23 +1,29 @@
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #17212b;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  user-select: none;
+// Инициализация Telegram WebApp
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+// Загружаем сохранённые монеты или начинаем с нуля
+let coins = parseInt(localStorage.getItem('coins')) || 0;
+const coinsEl = document.getElementById('coins');
+const tapBtn = document.getElementById('tapBtn');
+
+// Обновляем цифру на экране
+function updateUI() {
+  coinsEl.textContent = coins;
 }
-.app { text-align: center; }
-h1 { font-size: 24px; }
-#tapBtn {
-  font-size: 28px;
-  padding: 20px 40px;
-  border-radius: 20px;
-  border: none;
-  background: #2ea6ff;
-  color: white;
-  transition: transform 0.1s;
-}
-#tapBtn:active { transform: scale(0.95); }
+
+// Обработчик клика
+tapBtn.addEventListener('click', () => {
+  coins += 1;
+  updateUI();
+  localStorage.setItem('coins', coins);
+  
+  // Вибрация в Телеге (если поддерживается)
+  if (tg.HapticFeedback) {
+    tg.HapticFeedback.impactOccurred('light');
+  }
+});
+
+// Показываем начальное значение
+updateUI();
