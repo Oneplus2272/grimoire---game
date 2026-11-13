@@ -9,7 +9,8 @@ if (tg) {
 // --- СОСТОЯНИЕ ИГРЫ ---
 let coins = parseInt(localStorage.getItem('coins')) || 0;
 let powerLevel = parseInt(localStorage.getItem('powerLevel')) || 1; 
-let autoLevel = parseInt(localStorage.getItem('autoLevel')) || 0; // Уровень автоклика
+let autoLevel = parseInt(localStorage.getItem('autoLevel')) || 0; 
+let highScore = parseInt(localStorage.getItem('highScore')) || 0; // Рекорд
 
 const costPower = 50; 
 const costAuto = 100;
@@ -23,10 +24,8 @@ if (secondsOffline > 0 && autoLevel > 0) {
   let offlineEarnings = secondsOffline * autoLevel;
   coins += offlineEarnings;
   localStorage.setItem('coins', coins);
-  // Можно потом добавить всплывашку "Пока вас не было, кот заработал X монет"
 }
 
-// Обновляем время последнего визита
 localStorage.setItem('lastOnline', Date.now());
 
 // --- ЭЛЕМЕНТЫ DOM ---
@@ -39,10 +38,17 @@ const powerLevelEl = document.getElementById('powerLevel');
 const autoLevelEl = document.getElementById('autoLevel');
 const petImage = document.getElementById('petImage'); 
 
+const currentCoinsEl = document.getElementById('currentCoins');
+const highScoreEl = document.getElementById('highScore');
+const shareBtn = document.getElementById('shareBtn');
+const resetBtn = document.getElementById('resetBtn');
+
 const screenGame = document.getElementById('screen-game');
 const screenShop = document.getElementById('screen-shop');
+const screenRating = document.getElementById('screen-rating');
 const navGameBtn = document.getElementById('navGameBtn');
 const navShopBtn = document.getElementById('navShopBtn');
+const navRatingBtn = document.getElementById('navRatingBtn');
 
 // --- ФУНКЦИИ ---
 function updateUI() {
@@ -54,6 +60,14 @@ function updateUI() {
   
   buyPowerBtn.disabled = coins < costPower;
   buyAutoBtn.disabled = coins < costAuto;
+
+  // Обновляем рейтинг
+  currentCoinsEl.textContent = coins;
+  if (coins > highScore) {
+    highScore = coins;
+    localStorage.setItem('highScore', highScore);
+  }
+  highScoreEl.textContent = highScore;
 }
 
 // --- ЛОГИКА КЛИКА ---
@@ -68,7 +82,7 @@ tapBtn.addEventListener('click', () => {
   if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 });
 
-// --- ПОКУПКА СИЛЫ КЛИКА ---
+// --- ПОКУПКИ ---
 buyPowerBtn.addEventListener('click', () => {
   if (coins >= costPower) {
     coins -= costPower;
@@ -80,7 +94,6 @@ buyPowerBtn.addEventListener('click', () => {
   }
 });
 
-// --- ПОКУПКА АВТОКЛИКА ---
 buyAutoBtn.addEventListener('click', () => {
   if (coins >= costAuto) {
     coins -= costAuto;
@@ -92,31 +105,63 @@ buyAutoBtn.addEventListener('click', () => {
   }
 });
 
-// --- АВТОМАТИЧЕСКОЕ НАЧИСЛЕНИЕ (Каждую секунду) ---
+// --- АВТОКЛИК ---
 setInterval(() => {
   if (autoLevel > 0) {
     coins += autoLevel;
     updateUI();
     localStorage.setItem('coins', coins);
-    // Обновляем время, чтобы офлайн-доход считался корректно
     localStorage.setItem('lastOnline', Date.now());
   }
 }, 1000);
 
+// --- ПОДЕЛИТЬСЯ ---
+shareBtn.addEventListener('click', () => {
+  const text = `Я накликал ${highScore} монет в игре "Кибер-Кот"! Попробуй побить мой рекорд! 🐈‍⬛💻`;
+  const url = "https://t.me/GrimoireDuel_bot/grimoire_game"; // Ссылка на твою игру (проверь, чтобы была правильная)
+  
+  // Вызываем нативное окно "Поделиться" в Telegram
+  if (tg) {
+    tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+  } else {
+    // Если тестируем в браузере
+    alert("В Телеграме тут откроется окно 'Поделиться'");
+  }
+});
+
+// --- СБРОС ПРОГРЕССА ---
+resetBtn.addEventListener('click', () => {
+  if (confirm("Ты уверен, что хочешь удалить весь прогресс? Кот обидится...")) {
+    localStorage.clear();
+    location.reload(); // Перезагружаем страницу
+  }
+});
+
 // --- НАВИГАЦИЯ ---
-navGameBtn.addEventListener('click', () => {
-  screenGame.classList.remove('hidden');
-  screenShop.classList.add('hidden');
-  navGameBtn.classList.add('active');
+function switchTab(activeBtn, activeScreen) {
+  navGameBtn.classList.remove('active');
   navShopBtn.classList.remove('active');
-  localStorage.setItem('lastOnline', Date.now()); // Обновляем время при переходе
+  navRatingBtn.classList.remove('active');
+  
+  screenGame.classList.add('hidden');
+  screenShop.classList.add('hidden');
+  screenRating.classList.add('hidden');
+
+  activeBtn.classList.add('active');
+  activeScreen.classList.remove('hidden');
+}
+
+navGameBtn.addEventListener('click', () => {
+  switchTab(navGameBtn, screenGame);
+  localStorage.setItem('lastOnline', Date.now());
 });
 
 navShopBtn.addEventListener('click', () => {
-  screenGame.classList.add('hidden');
-  screenShop.classList.remove('hidden');
-  navGameBtn.classList.remove('active');
-  navShopBtn.classList.add('active');
+  switchTab(navShopBtn, screenShop);
+});
+
+navRatingBtn.addEventListener('click', () => {
+  switchTab(navRatingBtn, screenRating);
 });
 
 updateUI();
