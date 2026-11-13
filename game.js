@@ -14,7 +14,6 @@ function formatNumber(num) {
   return Math.floor(num).toString();
 }
 
-// --- СОСТОЯНИЕ ---
 let coins = parseInt(localStorage.getItem('coins')) || 0;
 let damage = parseInt(localStorage.getItem('damage')) || 10; 
 let maxHp = parseInt(localStorage.getItem('maxHp')) || 100; 
@@ -31,7 +30,6 @@ let playerCurrentHp = maxHp;
 let isBattleActive = false;
 let battleInterval;
 
-// --- DOM ---
 const coinsEl = document.getElementById('coins');
 const incomeEl = document.getElementById('income');
 const enemyImage = document.getElementById('enemyImage');
@@ -48,7 +46,6 @@ const screenBattle = document.getElementById('screen-battle');
 const screenShop = document.getElementById('screen-shop');
 const screenRating = document.getElementById('screen-rating');
 
-// --- UI ---
 function updateUI() {
   coinsEl.textContent = formatNumber(coins);
   incomeEl.textContent = formatNumber(autoLevel);
@@ -65,7 +62,6 @@ function updateUI() {
   document.getElementById('highScore').textContent = formatNumber(highScore);
 }
 
-// --- ЭФФЕКТЫ УРОНА ---
 function spawnDamage(container, amount, isPlayerDmg) {
   const el = document.createElement('div');
   el.classList.add(isPlayerDmg ? 'floating-damage-player' : 'floating-damage-enemy');
@@ -81,7 +77,6 @@ function spawnDamage(container, amount, isPlayerDmg) {
   setTimeout(() => el.remove(), 800);
 }
 
-// --- БОЙ ---
 function startBattle() {
   document.body.classList.add('hide-ui');
 
@@ -98,13 +93,11 @@ function startBattle() {
   battleInterval = setInterval(() => {
     if (!isBattleActive) return;
 
-    // Кот бьет крысу
     enemyCurrentHp -= damage;
     spawnDamage(enemyDamageContainer, damage, true);
     enemyImage.classList.add('hit-shake');
     setTimeout(() => enemyImage.classList.remove('hit-shake'), 200);
 
-    // Крыса бьет кота
     playerCurrentHp -= 15; 
     spawnDamage(playerDamageContainer, 15, false);
     battlePetImage.classList.add('hit-shake');
@@ -152,10 +145,8 @@ function endBattle(isWin) {
   }, 800);
 }
 
-// ВОТ ТУТ БЫЛА ОШИБКА, ТЕПЕРЬ КНОПКА РАБОТАЕТ
 document.getElementById('goToBattleBtn').addEventListener('click', startBattle);
 
-// --- МАГАЗИН ---
 document.getElementById('buyPowerBtn').addEventListener('click', () => {
   let cost = Math.floor(baseCostDamage * Math.pow(1.1, damage / 5 - 2));
   if (coins >= cost) {
@@ -183,14 +174,12 @@ document.getElementById('buyAutoBtn').addEventListener('click', () => {
   }
 });
 
-// --- АВТОКЛИК ---
 setInterval(() => {
   if (autoLevel > 0) {
     coins += autoLevel; updateUI(); localStorage.setItem('coins', coins);
   }
 }, 1000);
 
-// --- НАВИГАЦИЯ ---
 function switchTab(activeBtnId, activeScreen) {
   document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.main-content').forEach(scr => scr.classList.add('hidden'));
@@ -202,7 +191,6 @@ document.getElementById('navGameBtn').addEventListener('click', () => switchTab(
 document.getElementById('navShopBtn').addEventListener('click', () => switchTab('navShopBtn', screenShop));
 document.getElementById('navRatingBtn').addEventListener('click', () => switchTab('navRatingBtn', screenRating));
 
-// --- РЕЙТИНГ ---
 document.getElementById('shareBtn').addEventListener('click', () => {
   const text = `Я накликал ${formatNumber(highScore)} монет в игре "Кибер-Кот"! Попробуй побить мой рекорд! 🐈‍⬛💻`;
   const url = "https://t.me/GrimoireDuel_bot/grimoire_game"; 
