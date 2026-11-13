@@ -3,7 +3,13 @@ let tg = window.Telegram?.WebApp;
 
 if (tg) {
   tg.ready();
-  tg.expand(); // Растягиваем на весь экран
+  tg.expand(); // Растягиваем на максимум доступной высоты
+  tg.disableVerticalSwipes(); // Запрещаем случайно закрывать игру свайпом вниз
+  
+  // Пытаемся запросить полноэкранный режим (работает в новых версиях Telegram)
+  if (tg.requestFullscreen) {
+    tg.requestFullscreen();
+  }
 }
 
 // Загружаем сохраненные монеты
@@ -11,22 +17,18 @@ let coins = parseInt(localStorage.getItem('coins')) || 0;
 const coinsEl = document.getElementById('coins');
 const tapBtn = document.getElementById('tapBtn');
 
-// Обновляем текст на экране
 function updateUI() {
   coinsEl.textContent = coins;
 }
 
-// Обработчик клика
 tapBtn.addEventListener('click', () => {
   coins += 1;
   updateUI();
   localStorage.setItem('coins', coins);
   
-  // Вибрация, если мы в Телеге
   if (tg?.HapticFeedback) {
     tg.HapticFeedback.impactOccurred('light');
   }
 });
 
-// Запускаем обновление при старте
 updateUI();
