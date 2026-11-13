@@ -23,23 +23,15 @@ body {
 }
 
 .top-bar {
-  padding: 10px 15px; /* Немного уменьшил отступ, чтобы влезло две строки */
+  padding: 10px 15px;
   text-align: center;
   background: rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid #2ea6ff;
   z-index: 10;
 }
 
-.top-bar h1 {
-  font-size: 26px;
-  font-weight: bold;
-}
-
-.income-text {
-  font-size: 14px;
-  color: #8e9fae;
-  margin-top: 5px;
-}
+.top-bar h1 { font-size: 26px; font-weight: bold; }
+.income-text { font-size: 14px; color: #8e9fae; margin-top: 5px; }
 
 .main-content {
   flex: 1;
@@ -51,9 +43,7 @@ body {
   overflow-y: auto;
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
 /* --- Питомец --- */
 .pet-container {
@@ -71,9 +61,7 @@ body {
   transition: transform 0.1s ease;
 }
 
-.pet-jump {
-  transform: translateY(-20px) scale(1.1);
-}
+.pet-jump { transform: translateY(-20px) scale(1.1); }
 
 /* --- Кнопка --- */
 #tapBtn {
@@ -134,6 +122,46 @@ body {
   margin-bottom: 20px;
 }
 
+/* --- Рейтинг --- */
+#screen-rating h2 { margin-bottom: 20px; color: #2ea6ff; }
+.rating-card {
+  background: #212d3b;
+  width: 100%;
+  max-width: 300px;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 15px;
+  border: 1px solid #2a3847;
+}
+.rating-card p { color: #8e9fae; font-size: 14px; margin-bottom: 5px; }
+.rating-card h3 { font-size: 28px; color: white; }
+
+.share-btn {
+  background: #2ea6ff;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.reset-btn {
+  background: transparent;
+  color: #ff4a4a;
+  border: 1px solid #ff4a4a;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
 /* --- Нижняя навигация --- */
 .bottom-nav {
   display: flex;
@@ -147,10 +175,15 @@ body {
   background: transparent;
   border: none;
   color: #8e9fae;
-  font-size: 16px;
+  font-size: 14px; /* Чуть уменьшил шрифт, чтобы влезло 3 кнопки */
   font-weight: bold;
   cursor: pointer;
   transition: color 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
 }
 
 .nav-btn.active {
