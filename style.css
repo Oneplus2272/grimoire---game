@@ -29,16 +29,50 @@ body.hide-ui .bottom-nav {
   z-index: 2;
 }
 
+/* --- НОВАЯ ШАПКА С ПЛАШКАМИ --- */
 .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 15px;
-  text-align: center;
   background: rgba(23, 33, 43, 0.8);
   border-bottom: 1px solid #2ea6ff;
   z-index: 10;
 }
 
-.top-bar h1 { font-size: 26px; font-weight: bold; }
-.income-text { font-size: 14px; color: #8e9fae; margin-top: 5px; }
+.resource-panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(33, 45, 59, 0.9);
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 1px solid #2ea6ff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.coin-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.small-panel {
+  font-size: 16px;
+  padding: 6px 12px;
+  border: 1px solid #31a24c; /* Зеленая обводка для дохода */
+}
+
+.plus {
+  color: #31a24c;
+  font-weight: bold;
+}
+
+.per-sec {
+  font-size: 12px;
+  color: #8e9fae;
+}
 
 .main-content {
   flex: 1;
