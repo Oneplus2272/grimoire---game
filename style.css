@@ -15,6 +15,12 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Класс для скрытия интерфейса во время боя */
+body.hide-ui .top-bar,
+body.hide-ui .bottom-nav {
+  display: none !important;
+}
+
 .battle-background {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -63,13 +69,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px; /* Чуть увеличили отступ между иконкой и текстом */
+  gap: 12px;
   background: #ff4a4a;
   color: white;
   border: none;
   padding: 15px 40px;
   border-radius: 20px;
-  font-size: 26px; /* Текст стал чуть больше */
+  font-size: 26px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 6px 0 #b83333;
@@ -78,7 +84,6 @@ body {
 }
 .battle-btn:active { transform: translateY(6px); box-shadow: none; }
 
-/* Увеличили иконку мечей */
 .battle-icon { 
   width: 45px; 
   height: 45px; 
@@ -104,8 +109,8 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding-top: 10px;
-  padding-bottom: 20px;
+  padding-top: 40px; /* Добавили отступ сверху, так как шапки больше нет */
+  padding-bottom: 40px; /* И снизу */
 }
 
 .enemy-container, .player-container {
@@ -113,7 +118,7 @@ body {
   position: relative;
 }
 
-.enemy-name { font-size: 22px; color: #ff4a4a; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px black; }
+.enemy-name { font-size: 24px; color: #ff4a4a; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px black; }
 
 .relative-wrapper {
   position: relative;
@@ -121,24 +126,24 @@ body {
 }
 
 .enemy-img {
-  width: 220px; 
-  height: 220px;
+  width: 240px; 
+  height: 240px;
   object-fit: contain;
   filter: drop-shadow(0 0 20px rgba(255, 74, 74, 0.6));
   margin-top: 10px;
 }
 
 .battle-pet-img {
-  width: 220px; 
-  height: 220px;
+  width: 240px; 
+  height: 240px;
   object-fit: contain;
   filter: drop-shadow(0 0 20px rgba(46, 166, 255, 0.6));
   margin-bottom: 5px;
 }
 
 .health-bar-bg {
-  width: 260px;
-  height: 20px;
+  width: 280px;
+  height: 22px;
   background: #4a5b6b;
   border-radius: 10px;
   overflow: hidden;
@@ -149,7 +154,7 @@ body {
 .health-bar-fill { height: 100%; background: #ff4a4a; transition: width 0.2s; }
 .health-bar-fill.player-hp { background: #31a24c; }
 
-.hp-text { font-size: 16px; margin-top: 5px; color: white; font-weight: bold; text-shadow: 0 2px 4px black; }
+.hp-text { font-size: 18px; margin-top: 5px; color: white; font-weight: bold; text-shadow: 0 2px 4px black; }
 
 /* Контейнеры для цифр урона */
 .damage-container {
@@ -163,7 +168,7 @@ body {
 .floating-damage-player {
   position: absolute;
   color: #2ea6ff; 
-  font-size: 32px;
+  font-size: 36px;
   font-weight: bold;
   text-shadow: 0 2px 6px black;
   animation: floatUpDmg 0.8s ease-out forwards;
@@ -172,7 +177,7 @@ body {
 .floating-damage-enemy {
   position: absolute;
   color: #ff4a4a; 
-  font-size: 32px;
+  font-size: 36px;
   font-weight: bold;
   text-shadow: 0 2px 6px black;
   animation: floatUpDmg 0.8s ease-out forwards;
