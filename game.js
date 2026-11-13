@@ -10,10 +10,18 @@ if (tg) {
 let coins = parseInt(localStorage.getItem('coins')) || 0;
 let powerLevel = parseInt(localStorage.getItem('powerLevel')) || 1; 
 let autoLevel = parseInt(localStorage.getItem('autoLevel')) || 0; 
-let highScore = parseInt(localStorage.getItem('highScore')) || 0; // Рекорд
+let highScore = parseInt(localStorage.getItem('highScore')) || 0;
+let buyModeMax = false; // Режим покупки (false = x1, true = MAX)
 
-const costPower = 50; 
-const costAuto = 100;
+// Базовые цены и множитель роста
+const baseCostPower = 50;
+const baseCostAuto = 100;
+const priceMultiplier = 1.15;
+
+// Функция расчета текущей цены
+function getCost(base, level) {
+  return Math.floor(base * Math.pow(priceMultiplier, level - 1));
+}
 
 // --- ОФЛАЙН ДОХОД ---
 let lastOnline = parseInt(localStorage.getItem('lastOnline')) || Date.now();
@@ -21,11 +29,9 @@ let now = Date.now();
 let secondsOffline = Math.floor((now - lastOnline) / 1000);
 
 if (secondsOffline > 0 && autoLevel > 0) {
-  let offlineEarnings = secondsOffline * autoLevel;
-  coins += offlineEarnings;
+  coins += secondsOffline * autoLevel;
   localStorage.setItem('coins', coins);
 }
-
 localStorage.setItem('lastOnline', Date.now());
 
 // --- ЭЛЕМЕНТЫ DOM ---
@@ -37,6 +43,7 @@ const buyAutoBtn = document.getElementById('buyAutoBtn');
 const powerLevelEl = document.getElementById('powerLevel');
 const autoLevelEl = document.getElementById('autoLevel');
 const petImage = document.getElementById('petImage'); 
+const floatingNumbersContainer = document.getElementById('floating-numbers');
 
 const currentCoinsEl = document.getElementById('currentCoins');
 const highScoreEl = document.getElementById('highScore');
@@ -50,59 +57,125 @@ const navGameBtn = document.getElementById('navGameBtn');
 const navShopBtn = document.getElementById('navShopBtn');
 const navRatingBtn = document.getElementById('navRatingBtn');
 
-// --- ФУНКЦИИ ---
+const buyModeX1Btn = document.getElementById('buyModeX1');
+const buyModeMaxBtn = document.getElementById('buyModeMax');
+
+// --- UI ЛОГИКА ---
 function updateUI() {
-  coinsEl.textContent = coins;
+  coinsEl.textContent = Math.floor(coins);
   incomeEl.textContent = autoLevel;
   
   powerLevelEl.textContent = `Сила клика: ${powerLevel}`;
   autoLevelEl.textContent = `Автоклик: ${autoLevel}/сек`;
   
+  // Расчет цен для кнопок
+  let costPower = getCost(baseCostPower, powerLevel);
+  let costAuto = getCost(baseCostAuto, autoLevel + 1);
+
+  buyPowerBtn.textContent = `${costPower} 🪙`;
+  buyAutoBtn.textContent = `${costAuto} 🪙`;
+
+  // Блокировка кнопок, если не хватает денег
   buyPowerBtn.disabled = coins < costPower;
   buyAutoBtn.disabled = coins < costAuto;
 
-  // Обновляем рейтинг
-  currentCoinsEl.textContent = coins;
+  // Рейтинг
+  currentCoinsEl.textContent = Math.floor(coins);
   if (coins > highScore) {
-    highScore = coins;
+    highScore = Math.floor(coins);
     localStorage.setItem('highScore', highScore);
   }
   highScoreEl.textContent = highScore;
 }
 
+// --- ВСПЛЫВАЮЩИЕ ЦИФРЫ ---
+function spawnFloatingNumber(amount, x, y) {
+  const el = document.createElement('div');
+  el.classList.add('floating-number');
+  el.textContent = `+${amount}`;
+  
+  // Позиционируем относительно контейнера с котом
+  const rect = floatingNumbersContainer.getBoundingClientRect();
+  el.style.left = `${x - rect.left}px`;
+  el.style.top = `${y - rect.top}px`;
+  
+  floatingNumbersContainer.appendChild(el);
+  
+  // Удаляем элемент после завершения анимации
+  setTimeout(() => el.remove(), 800);
+}
+
 // --- ЛОГИКА КЛИКА ---
-tapBtn.addEventListener('click', () => {
+tapBtn.addEventListener('click', (e) => {
   coins += powerLevel; 
   updateUI();
   localStorage.setItem('coins', coins);
   
-  petImage.classList.add('pet-jump');
-  setTimeout(() => petImage.classList.remove('pet-jump'), 100); 
+  // Анимация сплющивания
+  petImage.classList.add('pet-squash');
+  setTimeout(() => petImage.classList.remove('pet-squash'), 100); 
+
+  // Спавн цифры (берем координаты клика или центр кота)
+  // Если клик по кнопке, берем случайную точку над котом
+  const rect = petImage.getBoundingClientRect();
+  const randomX = rect.left + rect.width / 2 + (Math.random() - 0.5) * 50;
+  const randomY = rect.top + rect.height / 2 + (Math.random() - 0.5) * 50;
+  spawnFloatingNumber(powerLevel, randomX, randomY);
 
   if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 });
 
 // --- ПОКУПКИ ---
 buyPowerBtn.addEventListener('click', () => {
-  if (coins >= costPower) {
-    coins -= costPower;
-    powerLevel += 1;
-    localStorage.setItem('coins', coins);
-    localStorage.setItem('powerLevel', powerLevel);
-    updateUI();
-    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+  let cost = getCost(baseCostPower, powerLevel);
+  
+  if (buyModeMax) {
+    // Покупаем максимум, сколько можем
+    let bought = 0;
+    while (coins >= cost) {
+      coins -= cost;
+      powerLevel++;
+      bought++;
+      cost = getCost(baseCostPower, powerLevel);
+    }
+    if (bought > 0) tg?.HapticFeedback?.notificationOccurred('success');
+  } else {
+    // Покупаем 1
+    if (coins >= cost) {
+      coins -= cost;
+      powerLevel++;
+      tg?.HapticFeedback?.notificationOccurred('success');
+    }
   }
+  
+  localStorage.setItem('coins', coins);
+  localStorage.setItem('powerLevel', powerLevel);
+  updateUI();
 });
 
 buyAutoBtn.addEventListener('click', () => {
-  if (coins >= costAuto) {
-    coins -= costAuto;
-    autoLevel += 1;
-    localStorage.setItem('coins', coins);
-    localStorage.setItem('autoLevel', autoLevel);
-    updateUI();
-    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+  let cost = getCost(baseCostAuto, autoLevel + 1);
+  
+  if (buyModeMax) {
+    let bought = 0;
+    while (coins >= cost) {
+      coins -= cost;
+      autoLevel++;
+      bought++;
+      cost = getCost(baseCostAuto, autoLevel + 1);
+    }
+    if (bought > 0) tg?.HapticFeedback?.notificationOccurred('success');
+  } else {
+    if (coins >= cost) {
+      coins -= cost;
+      autoLevel++;
+      tg?.HapticFeedback?.notificationOccurred('success');
+    }
   }
+  
+  localStorage.setItem('coins', coins);
+  localStorage.setItem('autoLevel', autoLevel);
+  updateUI();
 });
 
 // --- АВТОКЛИК ---
@@ -115,25 +188,35 @@ setInterval(() => {
   }
 }, 1000);
 
+// --- ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМА ПОКУПКИ ---
+buyModeX1Btn.addEventListener('click', () => {
+  buyModeMax = false;
+  buyModeX1Btn.classList.add('active');
+  buyModeMaxBtn.classList.remove('active');
+});
+
+buyModeMaxBtn.addEventListener('click', () => {
+  buyModeMax = true;
+  buyModeMaxBtn.classList.add('active');
+  buyModeX1Btn.classList.remove('active');
+});
+
 // --- ПОДЕЛИТЬСЯ ---
 shareBtn.addEventListener('click', () => {
   const text = `Я накликал ${highScore} монет в игре "Кибер-Кот"! Попробуй побить мой рекорд! 🐈‍⬛💻`;
-  const url = "https://t.me/GrimoireDuel_bot/grimoire_game"; // Ссылка на твою игру (проверь, чтобы была правильная)
-  
-  // Вызываем нативное окно "Поделиться" в Telegram
+  const url = "https://t.me/GrimoireDuel_bot/grimoire_game"; 
   if (tg) {
     tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
   } else {
-    // Если тестируем в браузере
     alert("В Телеграме тут откроется окно 'Поделиться'");
   }
 });
 
-// --- СБРОС ПРОГРЕССА ---
+// --- СБРОС ---
 resetBtn.addEventListener('click', () => {
   if (confirm("Ты уверен, что хочешь удалить весь прогресс? Кот обидится...")) {
     localStorage.clear();
-    location.reload(); // Перезагружаем страницу
+    location.reload();
   }
 });
 
