@@ -1,29 +1,66 @@
-// Инициализация Telegram WebApp
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
-
-// Загружаем сохранённые монеты или начинаем с нуля
-let coins = parseInt(localStorage.getItem('coins')) || 0;
-const coinsEl = document.getElementById('coins');
-const tapBtn = document.getElementById('tapBtn');
-
-// Обновляем цифру на экране
-function updateUI() {
-  coinsEl.textContent = coins;
+/* Сброс стандартных отступов и растягивание на весь экран */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-// Обработчик клика
-tapBtn.addEventListener('click', () => {
-  coins += 1;
-  updateUI();
-  localStorage.setItem('coins', coins);
-  
-  // Вибрация в Телеге (если поддерживается)
-  if (tg.HapticFeedback) {
-    tg.HapticFeedback.impactOccurred('light');
-  }
-});
+body {
+  font-family: sans-serif;
+  background: #17212b;
+  color: white; /* Принудительно белый текст */
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Убираем прокрутку */
+  user-select: none; /* Запрещаем выделять текст при кликах */
+  -webkit-tap-highlight-color: transparent; /* Убираем синюю рамку при тапе на телефоне */
+}
 
-// Показываем начальное значение
-updateUI();
+/* Основной контейнер на весь экран */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+/* Шапка с монетами */
+.top-bar {
+  padding: 20px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2); /* Легкое затемнение шапки */
+  border-bottom: 1px solid #2ea6ff;
+}
+
+.top-bar h1 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Центральная часть */
+.main-content {
+  flex: 1; /* Занимает все оставшееся место */
+  display: flex;
+  justify-content: center; /* Центрируем по горизонтали */
+  align-items: center; /* Центрируем по вертикали */
+}
+
+/* Сама кнопка */
+#tapBtn {
+  font-size: 32px;
+  padding: 30px 60px;
+  border-radius: 50px;
+  border: none;
+  background: #2ea6ff;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 8px 0 #1c75b8; /* Объемная тень */
+  transition: transform 0.1s, box-shadow 0.1s;
+  cursor: pointer;
+}
+
+/* Эффект нажатия */
+#tapBtn:active {
+  transform: translateY(8px); /* Кнопка как будто вдавливается */
+  box-shadow: 0 0px 0 #1c75b8; /* Тень исчезает */
+}
