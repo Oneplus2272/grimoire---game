@@ -4,33 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Кибер-Кот RPG</title>
-  <link rel="stylesheet" href="style.css?v=20">
+  <link rel="stylesheet" href="style.css?v=21">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div class="app">
-    <!-- Шапка -->
     <header class="top-bar">
       <h1>Монеты: <span id="coins">0</span></h1>
       <p class="income-text">В секунду: <span id="income">0</span></p>
     </header>
 
-    <!-- ГЛАВНЫЙ ЭКРАН -->
     <main class="main-content" id="screen-game">
       <button id="goToBattleBtn" class="battle-btn">
         <img src="./public/icon_battle.png" alt="Бой" class="battle-icon">
         В Бой
       </button>
-      
       <div class="pet-container">
         <img src="./public/pet.png" id="petImage" alt="Кибер-Кот" class="pet-img">
       </div>
     </main>
 
-    <!-- ЭКРАН БОЯ (Он был удален, я его вернул) -->
     <main class="main-content hidden" id="screen-battle">
       <div class="battle-arena">
-        <!-- Враг -->
         <div class="enemy-container">
           <p class="enemy-name">Крыса-мутант</p>
           <div class="health-bar-bg">
@@ -43,7 +38,6 @@
           </div>
         </div>
 
-        <!-- Игрок -->
         <div class="player-container">
           <div class="relative-wrapper">
             <img src="./public/pet.png" id="battlePetImage" alt="Кот" class="battle-pet-img">
@@ -57,7 +51,6 @@
       </div>
     </main>
 
-    <!-- ЭКРАН МАГАЗИНА -->
     <main class="main-content hidden" id="screen-shop">
       <div class="shop-item">
         <div class="shop-info">
@@ -82,7 +75,6 @@
       </div>
     </main>
 
-    <!-- ЭКРАН РЕЙТИНГА -->
     <main class="main-content hidden" id="screen-rating">
       <div class="rating-card">
         <p>Текущий баланс:</p>
@@ -96,7 +88,6 @@
       <button id="resetBtn" class="reset-btn">🗑 Сбросить прогресс</button>
     </main>
 
-    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
     <nav class="bottom-nav">
       <button id="navGameBtn" class="nav-btn active">
         <img src="./public/pet.png" alt="Питомец" class="nav-icon" style="border-radius:50%;">
@@ -113,6 +104,6 @@
     </nav>
   </div>
   
-  <script src="game.js?v=20"></script>
+  <script src="game.js?v=21"></script>
 </body>
 </html>
