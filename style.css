@@ -45,14 +45,13 @@ body {
 
 .hidden { display: none !important; }
 
-/* --- Питомец и Эффекты --- */
 .pet-container {
   margin-bottom: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   filter: drop-shadow(0 0 15px rgba(46, 166, 255, 0.4));
-  position: relative; /* Важно для всплывающих цифр */
+  position: relative;
 }
 
 .pet-img {
@@ -62,16 +61,14 @@ body {
   transition: transform 0.1s ease;
 }
 
-/* Анимация сплющивания (squash) вместо прыжка */
 .pet-squash {
   transform: scale(1.1, 0.9) translateY(10px);
 }
 
-/* Всплывающие цифры */
 #floating-numbers {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none; /* Чтобы не мешали кликам */
+  pointer-events: none;
   overflow: visible;
 }
 
@@ -90,7 +87,6 @@ body {
   100% { opacity: 0; transform: translateY(-50px) scale(1.2); }
 }
 
-/* --- Кнопка --- */
 #tapBtn {
   font-size: 32px;
   padding: 25px 60px;
@@ -109,7 +105,6 @@ body {
   box-shadow: 0 0px 0 #1c75b8;
 }
 
-/* --- Магазин --- */
 .buy-mode-toggle {
   display: flex;
   margin-bottom: 20px;
@@ -173,7 +168,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* --- Рейтинг --- */
 #screen-rating h2 { margin-bottom: 20px; color: #2ea6ff; }
 .rating-card {
   background: #212d3b;
@@ -213,7 +207,6 @@ body {
   cursor: pointer;
 }
 
-/* --- Нижняя навигация --- */
 .bottom-nav {
   display: flex;
   background: #1c2733;
