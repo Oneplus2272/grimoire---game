@@ -72,9 +72,8 @@ function spawnDamage(container, amount, isPlayerDmg) {
   el.classList.add(isPlayerDmg ? 'floating-damage-player' : 'floating-damage-enemy');
   el.textContent = `-${amount}`;
   
-  // Случайная позиция в пределах контейнера
-  const x = Math.random() * 80 + 10; // 10% - 90%
-  const y = Math.random() * 50 + 20; // 20% - 70%
+  const x = Math.random() * 80 + 10;
+  const y = Math.random() * 50 + 20;
   
   el.style.left = `${x}%`;
   el.style.top = `${y}%`;
@@ -85,6 +84,9 @@ function spawnDamage(container, amount, isPlayerDmg) {
 
 // --- БОЙ ---
 function startBattle() {
+  // СКРЫВАЕМ ИНТЕРФЕЙС (шапку и низ)
+  document.body.classList.add('hide-ui');
+
   screenGame.classList.add('hidden');
   screenBattle.classList.remove('hidden');
   battleBg.classList.remove('hidden');
@@ -100,13 +102,13 @@ function startBattle() {
 
     // 1. Кот бьет крысу
     enemyCurrentHp -= damage;
-    spawnDamage(enemyDamageContainer, damage, true); // Синие цифры над крысой
+    spawnDamage(enemyDamageContainer, damage, true);
     enemyImage.classList.add('hit-shake');
     setTimeout(() => enemyImage.classList.remove('hit-shake'), 200);
 
     // 2. Крыса бьет кота
-    playerCurrentHp -= 15; // Урон врага фиксированный
-    spawnDamage(playerDamageContainer, 15, false); // Красные цифры над котом
+    playerCurrentHp -= 15; 
+    spawnDamage(playerDamageContainer, 15, false);
     battlePetImage.classList.add('hit-shake');
     setTimeout(() => battlePetImage.classList.remove('hit-shake'), 200);
 
@@ -138,13 +140,17 @@ function endBattle(isWin) {
   
   setTimeout(() => {
     if (isWin) {
-      coins += 100; // Награда 100 монет
+      coins += 100;
       alert("Победа! Ты получил 100 монет!");
     } else {
       alert("Ты проиграл... Кот сбежал чиниться.");
     }
     localStorage.setItem('coins', coins);
     updateUI();
+    
+    // ВОЗВРАЩАЕМ ИНТЕРФЕЙС
+    document.body.classList.remove('hide-ui');
+    
     screenBattle.classList.add('hidden');
     screenGame.classList.remove('hidden');
     battleBg.classList.add('hidden');
