@@ -40,7 +40,6 @@ const enemyHpBar = document.getElementById('enemyHpBar');
 const playerHpBar = document.getElementById('playerHpBar');
 const enemyHpText = document.getElementById('enemyHpText');
 const playerHpText = document.getElementById('playerHpText');
-const battleBg = document.getElementById('battle-bg');
 const enemyDamageContainer = document.getElementById('enemy-damage-container');
 const playerDamageContainer = document.getElementById('player-damage-container');
 
@@ -84,12 +83,11 @@ function spawnDamage(container, amount, isPlayerDmg) {
 
 // --- БОЙ ---
 function startBattle() {
-  // СКРЫВАЕМ ИНТЕРФЕЙС (шапку и низ)
   document.body.classList.add('hide-ui');
 
   screenGame.classList.add('hidden');
   screenBattle.classList.remove('hidden');
-  battleBg.classList.remove('hidden');
+  
   isBattleActive = true;
   
   enemyCurrentHp = enemyMaxHp;
@@ -100,13 +98,13 @@ function startBattle() {
   battleInterval = setInterval(() => {
     if (!isBattleActive) return;
 
-    // 1. Кот бьет крысу
+    // Кот бьет крысу
     enemyCurrentHp -= damage;
     spawnDamage(enemyDamageContainer, damage, true);
     enemyImage.classList.add('hit-shake');
     setTimeout(() => enemyImage.classList.remove('hit-shake'), 200);
 
-    // 2. Крыса бьет кота
+    // Крыса бьет кота
     playerCurrentHp -= 15; 
     spawnDamage(playerDamageContainer, 15, false);
     battlePetImage.classList.add('hit-shake');
@@ -115,7 +113,6 @@ function startBattle() {
     updateBattleUI();
     if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
-    // Проверка смерти
     if (enemyCurrentHp <= 0) {
       enemyCurrentHp = 0;
       endBattle(true);
@@ -148,16 +145,14 @@ function endBattle(isWin) {
     localStorage.setItem('coins', coins);
     updateUI();
     
-    // ВОЗВРАЩАЕМ ИНТЕРФЕЙС
     document.body.classList.remove('hide-ui');
     
     screenBattle.classList.add('hidden');
     screenGame.classList.remove('hidden');
-    battleBg.classList.add('hidden');
   }, 800);
 }
 
-// --- УПРАВЛЕНИЕ ---
+// ВОТ ТУТ БЫЛА ОШИБКА, ТЕПЕРЬ КНОПКА РАБОТАЕТ
 document.getElementById('goToBattleBtn').addEventListener('click', startBattle);
 
 // --- МАГАЗИН ---
