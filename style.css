@@ -40,7 +40,6 @@ body.hide-ui .bottom-nav {
 .top-bar h1 { font-size: 26px; font-weight: bold; }
 .income-text { font-size: 14px; color: #8e9fae; margin-top: 5px; }
 
-/* --- ЭКРАНЫ И ФОНЫ --- */
 .main-content {
   flex: 1;
   display: flex;
@@ -52,7 +51,6 @@ body.hide-ui .bottom-nav {
   position: relative;
 }
 
-/* Твой фон для главного экрана */
 #screen-game {
   background-image: url('./public/main_bg.png');
   background-size: cover;
@@ -60,7 +58,6 @@ body.hide-ui .bottom-nav {
   background-repeat: no-repeat;
 }
 
-/* Твой фон для боя */
 #screen-battle {
   background-image: url('./public/bg.png');
   background-size: cover;
@@ -90,12 +87,7 @@ body.hide-ui .bottom-nav {
   z-index: 10;
 }
 .battle-btn:active { transform: translateY(6px); box-shadow: none; }
-
-.battle-icon { 
-  width: 45px; 
-  height: 45px; 
-  object-fit: contain; 
-}
+.battle-icon { width: 45px; height: 45px; object-fit: contain; }
 
 /* --- Питомец (Главный экран) --- */
 .pet-container {
