@@ -20,12 +20,10 @@ let coins = parseInt(localStorage.getItem('coins')) || 0;
 let powerLevel = parseInt(localStorage.getItem('powerLevel')) || 1; 
 let autoLevel = parseInt(localStorage.getItem('autoLevel')) || 0; 
 let highScore = parseInt(localStorage.getItem('highScore')) || 0;
-let buyModeMax = false; 
 
-// Сбалансированные цены
 const baseCostPower = 50;
 const baseCostAuto = 100;
-const priceMultiplier = 1.05; // Теперь растет всего на 5%
+const priceMultiplier = 1.05; // Рост цены на 5%
 
 function getCost(base, level) {
   return Math.floor(base * Math.pow(priceMultiplier, level - 1));
@@ -45,13 +43,13 @@ localStorage.setItem('lastOnline', Date.now());
 // --- ЭЛЕМЕНТЫ DOM ---
 const coinsEl = document.getElementById('coins');
 const incomeEl = document.getElementById('income');
-const tapBtn = document.getElementById('tapBtn');
+const petImage = document.getElementById('petImage'); 
+const floatingNumbersContainer = document.getElementById('floating-numbers');
+
 const buyPowerBtn = document.getElementById('buyPowerBtn');
 const buyAutoBtn = document.getElementById('buyAutoBtn');
 const powerLevelEl = document.getElementById('powerLevel');
 const autoLevelEl = document.getElementById('autoLevel');
-const petImage = document.getElementById('petImage'); 
-const floatingNumbersContainer = document.getElementById('floating-numbers');
 
 const currentCoinsEl = document.getElementById('currentCoins');
 const highScoreEl = document.getElementById('highScore');
@@ -64,9 +62,6 @@ const screenRating = document.getElementById('screen-rating');
 const navGameBtn = document.getElementById('navGameBtn');
 const navShopBtn = document.getElementById('navShopBtn');
 const navRatingBtn = document.getElementById('navRatingBtn');
-
-const buyModeX1Btn = document.getElementById('buyModeX1');
-const buyModeMaxBtn = document.getElementById('buyModeMax');
 
 // --- UI ЛОГИКА ---
 function updateUI() {
@@ -107,68 +102,50 @@ function spawnFloatingNumber(amount, x, y) {
   setTimeout(() => el.remove(), 800);
 }
 
-// --- ЛОГИКА КЛИКА ---
-tapBtn.addEventListener('click', () => {
+// --- ЛОГИКА КЛИКА ПО КОТУ ---
+petImage.addEventListener('click', (e) => {
   coins += powerLevel; 
   updateUI();
   localStorage.setItem('coins', coins);
   
+  // Анимация сплющивания
   petImage.classList.add('pet-squash');
   setTimeout(() => petImage.classList.remove('pet-squash'), 100); 
 
+  // Всплывающая цифра появляется прямо в месте клика (или рядом)
   const rect = petImage.getBoundingClientRect();
-  const randomX = rect.left + rect.width / 2 + (Math.random() - 0.5) * 50;
-  const randomY = rect.top + rect.height / 2 + (Math.random() - 0.5) * 50;
-  spawnFloatingNumber(powerLevel, randomX, randomY);
+  // Берем координаты клика, если не получилось (например, тапнули программно) - берем центр
+  let clickX = e.clientX || (rect.left + rect.width / 2);
+  let clickY = e.clientY || (rect.top + rect.height / 2);
+  
+  spawnFloatingNumber(powerLevel, clickX, clickY);
 
   if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 });
 
-// --- ПОКУПКИ ---
+// --- ПОКУПКИ (Только по 1 штуке, но цена растет) ---
 buyPowerBtn.addEventListener('click', () => {
   let cost = getCost(baseCostPower, powerLevel);
-  if (buyModeMax) {
-    let bought = 0;
-    while (coins >= cost) {
-      coins -= cost;
-      powerLevel++;
-      bought++;
-      cost = getCost(baseCostPower, powerLevel);
-    }
-    if (bought > 0) tg?.HapticFeedback?.notificationOccurred('success');
-  } else {
-    if (coins >= cost) {
-      coins -= cost;
-      powerLevel++;
-      tg?.HapticFeedback?.notificationOccurred('success');
-    }
+  if (coins >= cost) {
+    coins -= cost;
+    powerLevel++;
+    localStorage.setItem('coins', coins);
+    localStorage.setItem('powerLevel', powerLevel);
+    updateUI();
+    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
   }
-  localStorage.setItem('coins', coins);
-  localStorage.setItem('powerLevel', powerLevel);
-  updateUI();
 });
 
 buyAutoBtn.addEventListener('click', () => {
   let cost = getCost(baseCostAuto, autoLevel + 1);
-  if (buyModeMax) {
-    let bought = 0;
-    while (coins >= cost) {
-      coins -= cost;
-      autoLevel++;
-      bought++;
-      cost = getCost(baseCostAuto, autoLevel + 1);
-    }
-    if (bought > 0) tg?.HapticFeedback?.notificationOccurred('success');
-  } else {
-    if (coins >= cost) {
-      coins -= cost;
-      autoLevel++;
-      tg?.HapticFeedback?.notificationOccurred('success');
-    }
+  if (coins >= cost) {
+    coins -= cost;
+    autoLevel++;
+    localStorage.setItem('coins', coins);
+    localStorage.setItem('autoLevel', autoLevel);
+    updateUI();
+    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
   }
-  localStorage.setItem('coins', coins);
-  localStorage.setItem('autoLevel', autoLevel);
-  updateUI();
 });
 
 // --- АВТОКЛИК ---
@@ -180,19 +157,6 @@ setInterval(() => {
     localStorage.setItem('lastOnline', Date.now());
   }
 }, 1000);
-
-// --- ПЕРЕКЛЮЧАТЕЛЬ ---
-buyModeX1Btn.addEventListener('click', () => {
-  buyModeMax = false;
-  buyModeX1Btn.classList.add('active');
-  buyModeMaxBtn.classList.remove('active');
-});
-
-buyModeMaxBtn.addEventListener('click', () => {
-  buyModeMax = true;
-  buyModeMaxBtn.classList.add('active');
-  buyModeX1Btn.classList.remove('active');
-});
 
 // --- ПОДЕЛИТЬСЯ ---
 shareBtn.addEventListener('click', () => {
