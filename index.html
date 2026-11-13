@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Кибер-Кот RPG</title>
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=14">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+  <!-- ФОН ЛОКАЦИИ (только для боя, управляется через CSS класс) -->
+  <div id="battle-bg" class="battle-background hidden"></div>
+
   <div class="app">
     <!-- Шапка с монетами -->
     <header class="top-bar">
@@ -15,23 +18,31 @@
       <p class="income-text">В секунду: <span id="income">0</span></p>
     </header>
 
-    <!-- ЭКРАН 1: Игра (Главная) -->
+    <!-- ГЛАВНЫЙ ЭКРАН -->
     <main class="main-content" id="screen-game">
       
-      <!-- Кнопка перехода в бой -->
-      <button id="goToBattleBtn" class="battle-btn">⚔️ В Бой (Локация 1)</button>
+      <!-- Боковые иконки -->
+      <div class="side-icons">
+        <img src="./public/icon_shop.png" id="openShopBtn" alt="Магазин" class="side-icon">
+        <img src="./public/icon_rating.png" id="openRatingBtn" alt="Рейтинг" class="side-icon">
+      </div>
 
-      <!-- Зона кликера -->
-      <div class="pet-container" id="petContainer" style="margin-top: 20px;">
+      <!-- Кнопка В Бой -->
+      <div class="battle-btn-container">
+        <img src="./public/icon_battle.png" id="goToBattleBtn" alt="В Бой" class="battle-icon-btn">
+        <span class="battle-text">В Бой</span>
+      </div>
+
+      <!-- Кот -->
+      <div class="pet-container" id="petContainer">
         <img src="./public/pet.png" id="petImage" alt="Кибер-Кот" class="pet-img">
         <div id="floating-numbers"></div>
       </div>
     </main>
 
-    <!-- ЭКРАН 1.1: Бой (Скрыт по умолчанию) -->
-    <main class="main-content hidden" id="screen-battle">
+    <!-- ЭКРАН БОЯ -->
+    <main class="main-content hidden" id="screen-battle" style="z-index: 5; position: relative;">
       <div class="battle-arena">
-        <!-- Враг -->
         <div class="enemy-container">
           <p class="enemy-name">Крыса-мутант</p>
           <div class="health-bar-bg">
@@ -40,9 +51,8 @@
           <img src="./public/enemy1.png" id="enemyImage" alt="Враг" class="enemy-img">
         </div>
 
-        <!-- Игрок (Кот) -->
         <div class="player-container">
-          <img src="./public/pet.png" id="battlePetImage" alt="Кот" class="battle-pet-img">
+          <img src="./public/pet.png" alt="Кот" class="battle-pet-img">
           <div class="health-bar-bg">
             <div class="health-bar-fill player-hp" id="playerHpBar" style="width: 100%;"></div>
           </div>
@@ -50,63 +60,61 @@
         </div>
       </div>
       
-      <button id="backToGameBtn" class="reset-btn" style="margin-top: 20px;">← Отступить</button>
+      <!-- Кнопка отступить (используем иконку назад) -->
+      <button id="backToGameBtn" class="back-icon-btn">
+        <img src="./public/icon_back.png" alt="Назад" class="back-icon">
+      </button>
     </main>
 
-    <!-- ЭКРАН 2: Магазин -->
-    <main class="main-content hidden" id="screen-shop">
-      <h2>Улучшения</h2>
-      <div class="shop-item">
-        <div class="shop-info">
-          <h3>Кибер-коготь</h3>
-          <p>+5 к урону</p>
+    <!-- ОВЕРЛЕЙ: МАГАЗИН -->
+    <div class="overlay hidden" id="overlay-shop">
+      <div class="overlay-content">
+        <button class="close-overlay-btn" id="closeShopBtn">✕</button>
+        <h2>Магазин</h2>
+        <div class="shop-item">
+          <div class="shop-info">
+            <h3>Кибер-коготь</h3>
+            <p>+5 к урону</p>
+          </div>
+          <button id="buyPowerBtn" class="buy-btn">50 🪙</button>
         </div>
-        <button id="buyPowerBtn" class="buy-btn">50 🪙</button>
-      </div>
-
-      <div class="shop-item" style="margin-top: 20px;">
-        <div class="shop-info">
-          <h3>Броня</h3>
-          <p>+10 к макс. HP</p>
+        <div class="shop-item">
+          <div class="shop-info">
+            <h3>Броня</h3>
+            <p>+10 к макс. HP</p>
+          </div>
+          <button id="buyHpBtn" class="buy-btn">100 🪙</button>
         </div>
-        <button id="buyHpBtn" class="buy-btn">100 🪙</button>
-      </div>
-
-      <div class="shop-item" style="margin-top: 20px;">
-        <div class="shop-info">
-          <h3>Кибер-имплант</h3>
-          <p>+1 монета в секунду</p>
+        <div class="shop-item">
+          <div class="shop-info">
+            <h3>Кибер-имплант</h3>
+            <p>+1 монета в секунду</p>
+          </div>
+          <button id="buyAutoBtn" class="buy-btn">150 🪙</button>
         </div>
-        <button id="buyAutoBtn" class="buy-btn">100 🪙</button>
       </div>
-      <p id="autoLevel" class="stats">Автоклик: 0/сек</p>
-    </main>
+    </div>
 
-    <!-- ЭКРАН 3: Рейтинг -->
-    <main class="main-content hidden" id="screen-rating">
-      <h2>🏆 Твой рейтинг</h2>
-      <div class="rating-card">
-        <p>Текущий баланс:</p>
-        <h3><span id="currentCoins">0</span> 🪙</h3>
+    <!-- ОВЕРЛЕЙ: РЕЙТИНГ -->
+    <div class="overlay hidden" id="overlay-rating">
+      <div class="overlay-content">
+        <button class="close-overlay-btn" id="closeRatingBtn">✕</button>
+        <h2>Рейтинг</h2>
+        <div class="rating-card">
+          <p>Текущий баланс:</p>
+          <h3><span id="currentCoins">0</span> 🪙</h3>
+        </div>
+        <div class="rating-card">
+          <p>Твой рекорд:</p>
+          <h3><span id="highScore">0</span> 🪙</h3>
+        </div>
+        <button id="shareBtn" class="share-btn">📣 Похвастаться</button>
+        <button id="resetBtn" class="reset-btn">🗑 Сбросить прогресс</button>
       </div>
-      
-      <div class="rating-card">
-        <p>Твой рекорд:</p>
-        <h3><span id="highScore">0</span> 🪙</h3>
-      </div>
+    </div>
 
-      <button id="shareBtn" class="share-btn">📣 Похвастаться друзьям</button>
-      <button id="resetBtn" class="reset-btn">🗑 Сбросить прогресс</button>
-    </main>
-
-    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
-    <nav class="bottom-nav">
-      <button id="navGameBtn" class="nav-btn active">🎮 Играть</button>
-      <button id="navShopBtn" class="nav-btn">🛒 Магазин</button>
-      <button id="navRatingBtn" class="nav-btn">🏆 Рейтинг</button>
-    </nav>
   </div>
   
-  <script src="game.js?v=12"></script>
+  <script src="game.js?v=14"></script>
 </body>
 </html>
