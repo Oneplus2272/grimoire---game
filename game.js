@@ -15,212 +15,204 @@ function formatNumber(num) {
   return Math.floor(num).toString();
 }
 
-// --- СОСТОЯНИЕ ИГРЫ ---
+// --- СОСТОЯНИЕ ---
 let coins = parseInt(localStorage.getItem('coins')) || 0;
-let damage = parseInt(localStorage.getItem('damage')) || 10; // Урон (сила клика)
-let maxHp = parseInt(localStorage.getItem('maxHp')) || 100; // Макс ХП
+let damage = parseInt(localStorage.getItem('damage')) || 10; 
+let maxHp = parseInt(localStorage.getItem('maxHp')) || 100; 
 let autoLevel = parseInt(localStorage.getItem('autoLevel')) || 0; 
 let highScore = parseInt(localStorage.getItem('highScore')) || 0;
 
-// Цены (растут понемногу)
 const baseCostDamage = 50;
 const baseCostHp = 100;
 const baseCostAuto = 150;
 
-// Боевые переменные
 let enemyMaxHp = 100;
 let enemyCurrentHp = 100;
 let playerCurrentHp = maxHp;
 let isBattleActive = false;
-let enemyAttackInterval;
+let battleInterval;
 
-// --- ЭЛЕМЕНТЫ DOM ---
+// --- DOM ---
 const coinsEl = document.getElementById('coins');
 const incomeEl = document.getElementById('income');
 const petImage = document.getElementById('petImage'); 
-
-const screenGame = document.getElementById('screen-game');
-const screenBattle = document.getElementById('screen-battle');
-const screenShop = document.getElementById('screen-shop');
-const screenRating = document.getElementById('screen-rating');
-
-const goToBattleBtn = document.getElementById('goToBattleBtn');
-const backToGameBtn = document.getElementById('backToGameBtn');
 const enemyImage = document.getElementById('enemyImage');
 const enemyHpBar = document.getElementById('enemyHpBar');
 const playerHpBar = document.getElementById('playerHpBar');
 const playerHpText = document.getElementById('playerHpText');
+const battleBg = document.getElementById('battle-bg');
 
-const buyPowerBtn = document.getElementById('buyPowerBtn');
-const buyHpBtn = document.getElementById('buyHpBtn');
-const buyAutoBtn = document.getElementById('buyAutoBtn');
+const screenGame = document.getElementById('screen-game');
+const screenBattle = document.getElementById('screen-battle');
 
-// --- UI ЛОГИКА ---
+// --- UI ---
 function updateUI() {
   coinsEl.textContent = formatNumber(coins);
   incomeEl.textContent = formatNumber(autoLevel);
   
-  // Обновляем цены в магазине
-  buyPowerBtn.textContent = `${formatNumber(baseCostDamage * Math.pow(1.1, damage / 5 - 2))} 🪙`; // Условная цена
-  buyHpBtn.textContent = `${formatNumber(baseCostHp * Math.pow(1.1, maxHp / 10 - 10))} 🪙`;
-  buyAutoBtn.textContent = `${formatNumber(baseCostAuto * Math.pow(1.1, autoLevel))} 🪙`;
+  document.getElementById('buyPowerBtn').textContent = `${formatNumber(baseCostDamage * Math.pow(1.1, damage / 5 - 2))} 🪙`;
+  document.getElementById('buyHpBtn').textContent = `${formatNumber(baseCostHp * Math.pow(1.1, maxHp / 10 - 10))} 🪙`;
+  document.getElementById('buyAutoBtn').textContent = `${formatNumber(baseCostAuto * Math.pow(1.1, autoLevel))} 🪙`;
 
-  currentCoinsEl.textContent = formatNumber(coins);
+  document.getElementById('currentCoins').textContent = formatNumber(coins);
   if (coins > highScore) {
     highScore = Math.floor(coins);
     localStorage.setItem('highScore', highScore);
   }
-  highScoreEl.textContent = formatNumber(highScore);
+  document.getElementById('highScore').textContent = formatNumber(highScore);
 }
 
-// --- БОЕВАЯ СИСТЕМА ---
+// --- БОЙ (АВТОМАТИЧЕСКИЙ) ---
 function startBattle() {
   screenGame.classList.add('hidden');
   screenBattle.classList.remove('hidden');
+  battleBg.classList.remove('hidden'); // Показываем фон
   isBattleActive = true;
   
-  // Сброс здоровья
   enemyCurrentHp = enemyMaxHp;
   playerCurrentHp = maxHp;
   updateBattleUI();
 
-  // Враг бьет каждую секунду
-  clearInterval(enemyAttackInterval);
-  enemyAttackInterval = setInterval(() => {
-    if (isBattleActive && playerCurrentHp > 0) {
-      playerCurrentHp -= 5; // Враг бьет по 5
-      if (playerCurrentHp <= 0) {
-        playerCurrentHp = 0;
-        endBattle(false); // Проигрыш
-      }
-      updateBattleUI();
+  clearInterval(battleInterval);
+  // Бой каждую секунду
+  battleInterval = setInterval(() => {
+    if (!isBattleActive) return;
+
+    // Кот бьет врага
+    enemyCurrentHp -= damage;
+    enemyImage.classList.add('enemy-hit');
+    setTimeout(() => enemyImage.classList.remove('enemy-hit'), 200);
+    
+    // Враг бьет кота
+    playerCurrentHp -= 10; // Враг бьет по 10
+
+    updateBattleUI();
+
+    // Проверка на конец боя
+    if (enemyCurrentHp <= 0) {
+      enemyCurrentHp = 0;
+      endBattle(true);
+    } else if (playerCurrentHp <= 0) {
+      playerCurrentHp = 0;
+      endBattle(false);
     }
+
+    if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
   }, 1000);
 }
 
 function updateBattleUI() {
-  // Полоска врага
-  let enemyPercent = (enemyCurrentHp / enemyMaxHp) * 100;
-  enemyHpBar.style.width = `${Math.max(0, enemyPercent)}%`;
-  
-  // Полоска игрока
-  let playerPercent = (playerCurrentHp / maxHp) * 100;
-  playerHpBar.style.width = `${Math.max(0, playerPercent)}%`;
+  enemyHpBar.style.width = `${Math.max(0, (enemyCurrentHp / enemyMaxHp) * 100)}%`;
+  playerHpBar.style.width = `${Math.max(0, (playerCurrentHp / maxHp) * 100)}%`;
   playerHpText.textContent = `HP: ${Math.max(0, playerCurrentHp)}/${maxHp}`;
 }
 
 function endBattle(isWin) {
   isBattleActive = false;
-  clearInterval(enemyAttackInterval);
+  clearInterval(battleInterval);
   
-  if (isWin) {
-    coins += 50; // Награда за победу
-    alert("Победа! Ты получил 50 монет!");
-  } else {
-    alert("Ты проиграл... Кот убежал чинить броню.");
-  }
-  
-  localStorage.setItem('coins', coins);
-  updateUI();
-  
-  // Возвращаемся на главный экран
-  screenBattle.classList.add('hidden');
-  screenGame.classList.remove('hidden');
+  setTimeout(() => {
+    if (isWin) {
+      coins += 50;
+      alert("Победа! Ты получил 50 монет!");
+    } else {
+      alert("Ты проиграл... Кот сбежал в магазин чиниться.");
+    }
+    localStorage.setItem('coins', coins);
+    updateUI();
+    
+    // Возврат на главный экран
+    screenBattle.classList.add('hidden');
+    screenGame.classList.remove('hidden');
+    battleBg.classList.add('hidden'); // Прячем фон
+  }, 500); // Небольшая задержка, чтобы увидеть 0 HP
 }
 
-// Клик по врагу (Атака)
-enemyImage.addEventListener('click', () => {
-  if (!isBattleActive) return;
-  
-  enemyCurrentHp -= damage;
-  updateBattleUI();
-  
-  // Анимация врага (вздрагивает)
-  enemyImage.style.transform = 'scale(0.9) rotate(-5deg)';
-  setTimeout(() => { enemyImage.style.transform = 'scale(1) rotate(0deg)'; }, 100);
-
-  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-  if (enemyCurrentHp <= 0) {
-    endBattle(true);
-  }
-});
-
-// Кнопки перехода
-goToBattleBtn.addEventListener('click', startBattle);
-backToGameBtn.addEventListener('click', () => {
+// Кнопки управления боем
+document.getElementById('goToBattleBtn').addEventListener('click', startBattle);
+document.getElementById('backToGameBtn').addEventListener('click', () => {
   isBattleActive = false;
-  clearInterval(enemyAttackInterval);
+  clearInterval(battleInterval);
   screenBattle.classList.add('hidden');
   screenGame.classList.remove('hidden');
+  battleBg.classList.add('hidden');
 });
 
-// --- ПОКУПКИ ---
-buyPowerBtn.addEventListener('click', () => {
+// --- ОВЕРЛЕИ (Магазин / Рейтинг) ---
+document.getElementById('openShopBtn').addEventListener('click', () => {
+  document.getElementById('overlay-shop').classList.remove('hidden');
+});
+document.getElementById('closeShopBtn').addEventListener('click', () => {
+  document.getElementById('overlay-shop').classList.add('hidden');
+});
+
+document.getElementById('openRatingBtn').addEventListener('click', () => {
+  document.getElementById('overlay-rating').classList.remove('hidden');
+});
+document.getElementById('closeRatingBtn').addEventListener('click', () => {
+  document.getElementById('overlay-rating').classList.add('hidden');
+});
+
+// --- МАГАЗИН ---
+document.getElementById('buyPowerBtn').addEventListener('click', () => {
   let cost = Math.floor(baseCostDamage * Math.pow(1.1, damage / 5 - 2));
   if (coins >= cost) {
-    coins -= cost;
-    damage += 5;
-    localStorage.setItem('coins', coins);
-    localStorage.setItem('damage', damage);
-    updateUI();
+    coins -= cost; damage += 5;
+    localStorage.setItem('coins', coins); localStorage.setItem('damage', damage);
+    updateUI(); if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
   }
 });
 
-buyHpBtn.addEventListener('click', () => {
+document.getElementById('buyHpBtn').addEventListener('click', () => {
   let cost = Math.floor(baseCostHp * Math.pow(1.1, maxHp / 10 - 10));
   if (coins >= cost) {
-    coins -= cost;
-    maxHp += 10;
-    localStorage.setItem('coins', coins);
-    localStorage.setItem('maxHp', maxHp);
-    updateUI();
+    coins -= cost; maxHp += 10;
+    localStorage.setItem('coins', coins); localStorage.setItem('maxHp', maxHp);
+    updateUI(); if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
   }
 });
 
-buyAutoBtn.addEventListener('click', () => {
+document.getElementById('buyAutoBtn').addEventListener('click', () => {
   let cost = Math.floor(baseCostAuto * Math.pow(1.1, autoLevel));
   if (coins >= cost) {
-    coins -= cost;
-    autoLevel++;
-    localStorage.setItem('coins', coins);
-    localStorage.setItem('autoLevel', autoLevel);
-    updateUI();
+    coins -= cost; autoLevel++;
+    localStorage.setItem('coins', coins); localStorage.setItem('autoLevel', autoLevel);
+    updateUI(); if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
   }
 });
 
-// --- КЛИК ПО КОТУ (фарм монет вне боя) ---
-petImage.addEventListener('click', (e) => {
-  coins += 1; // Теперь кот дает 1 монету за клик (урон отдельно)
+// --- ФАРМ (Клик по коту) ---
+petImage.addEventListener('click', () => {
+  coins += 1; 
   updateUI();
   localStorage.setItem('coins', coins);
-  
   petImage.classList.add('pet-squash');
   setTimeout(() => petImage.classList.remove('pet-squash'), 100); 
-
   if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 });
 
-// --- АВТОКЛИК ---
 setInterval(() => {
   if (autoLevel > 0) {
-    coins += autoLevel;
-    updateUI();
-    localStorage.setItem('coins', coins);
+    coins += autoLevel; updateUI(); localStorage.setItem('coins', coins);
   }
 }, 1000);
 
-// --- НАВИГАЦИЯ ---
-function switchTab(activeBtn, activeScreen) {
-  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.main-content').forEach(scr => scr.classList.add('hidden'));
-  
-  activeBtn.classList.add('active');
-  activeScreen.classList.remove('hidden');
-}
+// --- РЕЙТИНГ (Сброс и Шеринг) ---
+document.getElementById('shareBtn').addEventListener('click', () => {
+  const text = `Я накликал ${formatNumber(highScore)} монет в игре "Кибер-Кот"! Попробуй побить мой рекорд! 🐈‍⬛💻`;
+  const url = "https://t.me/GrimoireDuel_bot/grimoire_game"; 
+  if (tg) {
+    tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+  } else {
+    alert("В Телеграме тут откроется окно 'Поделиться'");
+  }
+});
 
-document.getElementById('navGameBtn').addEventListener('click', () => switchTab(document.getElementById('navGameBtn'), screenGame));
-document.getElementById('navShopBtn').addEventListener('click', () => switchTab(document.getElementById('navShopBtn'), screenShop));
-document.getElementById('navRatingBtn').addEventListener('click', () => switchTab(document.getElementById('navRatingBtn'), screenRating));
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (confirm("Ты уверен, что хочешь удалить весь прогресс? Кот обидится...")) {
+    localStorage.clear();
+    location.reload();
+  }
+});
 
 updateUI();
