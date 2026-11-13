@@ -45,13 +45,14 @@ body {
 
 .hidden { display: none !important; }
 
-/* --- Питомец --- */
+/* --- Питомец и Эффекты --- */
 .pet-container {
   margin-bottom: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   filter: drop-shadow(0 0 15px rgba(46, 166, 255, 0.4));
+  position: relative; /* Важно для всплывающих цифр */
 }
 
 .pet-img {
@@ -61,7 +62,33 @@ body {
   transition: transform 0.1s ease;
 }
 
-.pet-jump { transform: translateY(-20px) scale(1.1); }
+/* Анимация сплющивания (squash) вместо прыжка */
+.pet-squash {
+  transform: scale(1.1, 0.9) translateY(10px);
+}
+
+/* Всплывающие цифры */
+#floating-numbers {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; /* Чтобы не мешали кликам */
+  overflow: visible;
+}
+
+.floating-number {
+  position: absolute;
+  color: #2ea6ff;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  animation: floatUp 0.8s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-50px) scale(1.2); }
+}
 
 /* --- Кнопка --- */
 #tapBtn {
@@ -83,6 +110,29 @@ body {
 }
 
 /* --- Магазин --- */
+.buy-mode-toggle {
+  display: flex;
+  margin-bottom: 20px;
+  background: #212d3b;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mode-btn {
+  background: transparent;
+  color: #8e9fae;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.mode-btn.active {
+  background: #2ea6ff;
+  color: white;
+}
+
 .shop-item {
   background: #212d3b;
   width: 100%;
@@ -99,18 +149,19 @@ body {
 .shop-info h3 { font-size: 20px; margin-bottom: 5px; }
 .shop-info p { color: #8e9fae; font-size: 14px; }
 
-#buyPowerBtn, #buyAutoBtn {
+.buy-btn {
   background: #31a24c;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 15px;
   border-radius: 10px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-#buyPowerBtn:disabled, #buyAutoBtn:disabled {
+.buy-btn:disabled {
   background: #4a5b6b;
   color: #8e9fae;
   cursor: not-allowed;
@@ -175,10 +226,9 @@ body {
   background: transparent;
   border: none;
   color: #8e9fae;
-  font-size: 14px; /* Чуть уменьшил шрифт, чтобы влезло 3 кнопки */
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
-  transition: color 0.2s;
   display: flex;
   flex-direction: column;
   justify-content: center;
