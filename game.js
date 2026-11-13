@@ -8,16 +8,16 @@ if (tg) {
 
 // --- СОСТОЯНИЕ ИГРЫ ---
 let coins = parseInt(localStorage.getItem('coins')) || 0;
-let powerLevel = parseInt(localStorage.getItem('powerLevel')) || 1; // Уровень клика (урон)
-const costToUpgrade = 50; // Стоимость улучшения
+let powerLevel = parseInt(localStorage.getItem('powerLevel')) || 1; 
+const costToUpgrade = 50; 
 
 // --- ЭЛЕМЕНТЫ DOM ---
 const coinsEl = document.getElementById('coins');
 const tapBtn = document.getElementById('tapBtn');
 const buyPowerBtn = document.getElementById('buyPowerBtn');
 const powerLevelEl = document.getElementById('powerLevel');
+const petImage = document.getElementById('petImage'); 
 
-// Экраны и кнопки навигации
 const screenGame = document.getElementById('screen-game');
 const screenShop = document.getElementById('screen-shop');
 const navGameBtn = document.getElementById('navGameBtn');
@@ -28,45 +28,49 @@ function updateUI() {
   coinsEl.textContent = coins;
   powerLevelEl.textContent = `Текущий уровень: ${powerLevel}`;
   
-  // Блокируем кнопку покупки, если не хватает монет
   if (coins >= costToUpgrade) {
     buyPowerBtn.disabled = false;
-    buyPowerBtn.textContent = `${costToUpgrade} 🪙`;
   } else {
     buyPowerBtn.disabled = true;
-    buyPowerBtn.textContent = `${costToUpgrade} 🪙`;
   }
 }
 
-// Обработчик клика по главной кнопке
+// --- ЛОГИКА КЛИКА ---
 tapBtn.addEventListener('click', () => {
-  coins += powerLevel; // Начисляем монеты с учетом уровня
+  coins += powerLevel; 
   updateUI();
   localStorage.setItem('coins', coins);
   
+  // Анимация прыжка кота
+  petImage.classList.add('pet-jump');
+  setTimeout(() => {
+    petImage.classList.remove('pet-jump');
+  }, 100); 
+
   if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 });
 
-// Обработчик покупки улучшения
+// --- ЛОГИКА ПОКУПКИ ---
 buyPowerBtn.addEventListener('click', () => {
   if (coins >= costToUpgrade) {
     coins -= costToUpgrade;
     powerLevel += 1;
     
-    // Сохраняем прогресс
     localStorage.setItem('coins', coins);
     localStorage.setItem('powerLevel', powerLevel);
-    
     updateUI();
     
-    // Вибрируем при успешной покупке (двойной удар)
-    if (tg?.HapticFeedback) {
-      tg.HapticFeedback.notificationOccurred('success');
-    }
+    // Анимация радости кота
+    petImage.classList.add('pet-happy');
+    setTimeout(() => {
+      petImage.classList.remove('pet-happy');
+    }, 500); // Чуть дольше, чтобы увидеть
+
+    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
   }
 });
 
-// --- НАВИГАЦИЯ (ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ) ---
+// --- НАВИГАЦИЯ ---
 navGameBtn.addEventListener('click', () => {
   screenGame.classList.remove('hidden');
   screenShop.classList.add('hidden');
@@ -81,5 +85,4 @@ navShopBtn.addEventListener('click', () => {
   navShopBtn.classList.add('active');
 });
 
-// Запуск
 updateUI();
