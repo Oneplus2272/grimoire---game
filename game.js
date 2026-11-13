@@ -6,7 +6,6 @@ if (tg) {
   if (tg.requestFullscreen) tg.requestFullscreen();
 }
 
-// --- ФОРМАТИРОВАНИЕ ---
 function formatNumber(num) {
   if (num >= 1e12) return (num / 1e12).toFixed(1) + 'T';
   if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
@@ -35,15 +34,20 @@ let battleInterval;
 // --- DOM ---
 const coinsEl = document.getElementById('coins');
 const incomeEl = document.getElementById('income');
-const petImage = document.getElementById('petImage'); 
 const enemyImage = document.getElementById('enemyImage');
+const battlePetImage = document.getElementById('battlePetImage');
 const enemyHpBar = document.getElementById('enemyHpBar');
 const playerHpBar = document.getElementById('playerHpBar');
+const enemyHpText = document.getElementById('enemyHpText');
 const playerHpText = document.getElementById('playerHpText');
 const battleBg = document.getElementById('battle-bg');
+const enemyDamageContainer = document.getElementById('enemy-damage-container');
+const playerDamageContainer = document.getElementById('player-damage-container');
 
 const screenGame = document.getElementById('screen-game');
 const screenBattle = document.getElementById('screen-battle');
+const screenShop = document.getElementById('screen-shop');
+const screenRating = document.getElementById('screen-rating');
 
 // --- UI ---
 function updateUI() {
@@ -62,11 +66,28 @@ function updateUI() {
   document.getElementById('highScore').textContent = formatNumber(highScore);
 }
 
-// --- БОЙ (АВТОМАТИЧЕСКИЙ) ---
+// --- ЭФФЕКТЫ УРОНА ---
+function spawnDamage(container, amount, isPlayerDmg) {
+  const el = document.createElement('div');
+  el.classList.add(isPlayerDmg ? 'floating-damage-player' : 'floating-damage-enemy');
+  el.textContent = `-${amount}`;
+  
+  // Случайная позиция в пределах контейнера
+  const x = Math.random() * 80 + 10; // 10% - 90%
+  const y = Math.random() * 50 + 20; // 20% - 70%
+  
+  el.style.left = `${x}%`;
+  el.style.top = `${y}%`;
+  
+  container.appendChild(el);
+  setTimeout(() => el.remove(), 800);
+}
+
+// --- БОЙ ---
 function startBattle() {
   screenGame.classList.add('hidden');
   screenBattle.classList.remove('hidden');
-  battleBg.classList.remove('hidden'); // Показываем фон
+  battleBg.classList.remove('hidden');
   isBattleActive = true;
   
   enemyCurrentHp = enemyMaxHp;
@@ -74,21 +95,25 @@ function startBattle() {
   updateBattleUI();
 
   clearInterval(battleInterval);
-  // Бой каждую секунду
   battleInterval = setInterval(() => {
     if (!isBattleActive) return;
 
-    // Кот бьет врага
+    // 1. Кот бьет крысу
     enemyCurrentHp -= damage;
-    enemyImage.classList.add('enemy-hit');
-    setTimeout(() => enemyImage.classList.remove('enemy-hit'), 200);
-    
-    // Враг бьет кота
-    playerCurrentHp -= 10; // Враг бьет по 10
+    spawnDamage(enemyDamageContainer, damage, true); // Синие цифры над крысой
+    enemyImage.classList.add('hit-shake');
+    setTimeout(() => enemyImage.classList.remove('hit-shake'), 200);
+
+    // 2. Крыса бьет кота
+    playerCurrentHp -= 15; // Урон врага фиксированный
+    spawnDamage(playerDamageContainer, 15, false); // Красные цифры над котом
+    battlePetImage.classList.add('hit-shake');
+    setTimeout(() => battlePetImage.classList.remove('hit-shake'), 200);
 
     updateBattleUI();
+    if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
-    // Проверка на конец боя
+    // Проверка смерти
     if (enemyCurrentHp <= 0) {
       enemyCurrentHp = 0;
       endBattle(true);
@@ -96,13 +121,13 @@ function startBattle() {
       playerCurrentHp = 0;
       endBattle(false);
     }
-
-    if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
   }, 1000);
 }
 
 function updateBattleUI() {
   enemyHpBar.style.width = `${Math.max(0, (enemyCurrentHp / enemyMaxHp) * 100)}%`;
+  enemyHpText.textContent = `HP: ${Math.max(0, enemyCurrentHp)}/${enemyMaxHp}`;
+  
   playerHpBar.style.width = `${Math.max(0, (playerCurrentHp / maxHp) * 100)}%`;
   playerHpText.textContent = `HP: ${Math.max(0, playerCurrentHp)}/${maxHp}`;
 }
@@ -113,45 +138,21 @@ function endBattle(isWin) {
   
   setTimeout(() => {
     if (isWin) {
-      coins += 50;
-      alert("Победа! Ты получил 50 монет!");
+      coins += 100; // Награда 100 монет
+      alert("Победа! Ты получил 100 монет!");
     } else {
-      alert("Ты проиграл... Кот сбежал в магазин чиниться.");
+      alert("Ты проиграл... Кот сбежал чиниться.");
     }
     localStorage.setItem('coins', coins);
     updateUI();
-    
-    // Возврат на главный экран
     screenBattle.classList.add('hidden');
     screenGame.classList.remove('hidden');
-    battleBg.classList.add('hidden'); // Прячем фон
-  }, 500); // Небольшая задержка, чтобы увидеть 0 HP
+    battleBg.classList.add('hidden');
+  }, 800);
 }
 
-// Кнопки управления боем
+// --- УПРАВЛЕНИЕ ---
 document.getElementById('goToBattleBtn').addEventListener('click', startBattle);
-document.getElementById('backToGameBtn').addEventListener('click', () => {
-  isBattleActive = false;
-  clearInterval(battleInterval);
-  screenBattle.classList.add('hidden');
-  screenGame.classList.remove('hidden');
-  battleBg.classList.add('hidden');
-});
-
-// --- ОВЕРЛЕИ (Магазин / Рейтинг) ---
-document.getElementById('openShopBtn').addEventListener('click', () => {
-  document.getElementById('overlay-shop').classList.remove('hidden');
-});
-document.getElementById('closeShopBtn').addEventListener('click', () => {
-  document.getElementById('overlay-shop').classList.add('hidden');
-});
-
-document.getElementById('openRatingBtn').addEventListener('click', () => {
-  document.getElementById('overlay-rating').classList.remove('hidden');
-});
-document.getElementById('closeRatingBtn').addEventListener('click', () => {
-  document.getElementById('overlay-rating').classList.add('hidden');
-});
 
 // --- МАГАЗИН ---
 document.getElementById('buyPowerBtn').addEventListener('click', () => {
@@ -181,35 +182,35 @@ document.getElementById('buyAutoBtn').addEventListener('click', () => {
   }
 });
 
-// --- ФАРМ (Клик по коту) ---
-petImage.addEventListener('click', () => {
-  coins += 1; 
-  updateUI();
-  localStorage.setItem('coins', coins);
-  petImage.classList.add('pet-squash');
-  setTimeout(() => petImage.classList.remove('pet-squash'), 100); 
-  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-});
-
+// --- АВТОКЛИК ---
 setInterval(() => {
   if (autoLevel > 0) {
     coins += autoLevel; updateUI(); localStorage.setItem('coins', coins);
   }
 }, 1000);
 
-// --- РЕЙТИНГ (Сброс и Шеринг) ---
+// --- НАВИГАЦИЯ ---
+function switchTab(activeBtnId, activeScreen) {
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.main-content').forEach(scr => scr.classList.add('hidden'));
+  document.getElementById(activeBtnId).classList.add('active');
+  activeScreen.classList.remove('hidden');
+}
+
+document.getElementById('navGameBtn').addEventListener('click', () => switchTab('navGameBtn', screenGame));
+document.getElementById('navShopBtn').addEventListener('click', () => switchTab('navShopBtn', screenShop));
+document.getElementById('navRatingBtn').addEventListener('click', () => switchTab('navRatingBtn', screenRating));
+
+// --- РЕЙТИНГ ---
 document.getElementById('shareBtn').addEventListener('click', () => {
   const text = `Я накликал ${formatNumber(highScore)} монет в игре "Кибер-Кот"! Попробуй побить мой рекорд! 🐈‍⬛💻`;
   const url = "https://t.me/GrimoireDuel_bot/grimoire_game"; 
-  if (tg) {
-    tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
-  } else {
-    alert("В Телеграме тут откроется окно 'Поделиться'");
-  }
+  if (tg) tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+  else alert("В Телеграме тут откроется окно 'Поделиться'");
 });
 
 document.getElementById('resetBtn').addEventListener('click', () => {
-  if (confirm("Ты уверен, что хочешь удалить весь прогресс? Кот обидится...")) {
+  if (confirm("Ты уверен, что хочешь удалить весь прогресс?")) {
     localStorage.clear();
     location.reload();
   }
