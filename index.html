@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Мой Питомец</title>
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -12,20 +12,20 @@
     <!-- Шапка с монетами -->
     <header class="top-bar">
       <h1>Монеты: <span id="coins">0</span></h1>
+      <p class="income-text">В секунду: <span id="income">0</span></p>
     </header>
 
     <!-- ЭКРАН 1: Игра -->
     <main class="main-content" id="screen-game">
-      <!-- Блок с питомцем -->
       <div class="pet-container">
         <img src="./public/pet.png" id="petImage" alt="Кибер-Кот" class="pet-img">
       </div>
-      
       <button id="tapBtn">Тапнуть</button>
     </main>
 
     <!-- ЭКРАН 2: Магазин -->
     <main class="main-content hidden" id="screen-shop">
+      <!-- Улучшение клика -->
       <div class="shop-item">
         <div class="shop-info">
           <h3>Мощный палец</h3>
@@ -33,7 +33,17 @@
         </div>
         <button id="buyPowerBtn">50 🪙</button>
       </div>
-      <p id="powerLevel" class="stats">Текущий уровень: 1</p>
+      <p id="powerLevel" class="stats">Сила клика: 1</p>
+
+      <!-- Улучшение пассивного дохода -->
+      <div class="shop-item" style="margin-top: 20px;">
+        <div class="shop-info">
+          <h3>Кибер-имплант</h3>
+          <p>+1 монета в секунду</p>
+        </div>
+        <button id="buyAutoBtn">100 🪙</button>
+      </div>
+      <p id="autoLevel" class="stats">Автоклик: 0/сек</p>
     </main>
 
     <!-- НИЖНЯЯ НАВИГАЦИЯ -->
@@ -43,6 +53,6 @@
     </nav>
   </div>
   
-  <script src="game.js?v=6"></script>
+  <script src="game.js?v=7"></script>
 </body>
 </html>
