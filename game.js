@@ -31,7 +31,6 @@ let isBattleActive = false;
 let battleInterval;
 
 const coinsEl = document.getElementById('coins');
-const incomeEl = document.getElementById('income');
 const enemyImage = document.getElementById('enemyImage');
 const battlePetImage = document.getElementById('battlePetImage');
 const enemyHpBar = document.getElementById('enemyHpBar');
@@ -48,11 +47,11 @@ const screenRating = document.getElementById('screen-rating');
 
 function updateUI() {
   coinsEl.textContent = formatNumber(coins);
-  incomeEl.textContent = formatNumber(autoLevel);
   
-  document.getElementById('buyPowerBtn').textContent = `${formatNumber(baseCostDamage * Math.pow(1.1, damage / 5 - 2))} 🪙`;
-  document.getElementById('buyHpBtn').textContent = `${formatNumber(baseCostHp * Math.pow(1.1, maxHp / 10 - 10))} 🪙`;
-  document.getElementById('buyAutoBtn').textContent = `${formatNumber(baseCostAuto * Math.pow(1.1, autoLevel))} 🪙`;
+  // Обновляем текст кнопок, сохраняя иконки внутри
+  document.getElementById('buyPowerBtn').innerHTML = `${formatNumber(baseCostDamage * Math.pow(1.1, damage / 5 - 2))} <img src="./public/icon_coin.png" class="btn-coin-icon">`;
+  document.getElementById('buyHpBtn').innerHTML = `${formatNumber(baseCostHp * Math.pow(1.1, maxHp / 10 - 10))} <img src="./public/icon_coin.png" class="btn-coin-icon">`;
+  document.getElementById('buyAutoBtn').innerHTML = `${formatNumber(baseCostAuto * Math.pow(1.1, autoLevel))} <img src="./public/icon_coin.png" class="btn-coin-icon">`;
 
   document.getElementById('currentCoins').textContent = formatNumber(coins);
   if (coins > highScore) {
