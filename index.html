@@ -4,21 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Кибер-Кот RPG</title>
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=23">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div class="app">
     <!-- НОВАЯ ШАПКА -->
     <header class="top-bar">
-      <div class="resource-panel">
-        <img src="./public/icon_coin.png" alt="Монеты" class="coin-icon">
+      <div class="balance-container">
+        <img src="./public/icon_coin.png" alt="Монеты" class="coin-icon-top">
         <span id="coins">0</span>
-      </div>
-      <div class="resource-panel small-panel">
-        <span class="plus">+</span>
-        <span id="income">0</span>
-        <span class="per-sec">/сек</span>
       </div>
     </header>
 
@@ -59,38 +54,46 @@
       </div>
     </main>
 
+    <!-- МАГАЗИН (эмодзи заменены на картинку) -->
     <main class="main-content hidden" id="screen-shop">
       <div class="shop-item">
         <div class="shop-info">
           <h3>Кибер-коготь</h3>
           <p>+5 к урону</p>
         </div>
-        <button id="buyPowerBtn" class="buy-btn">50 🪙</button>
+        <button id="buyPowerBtn" class="buy-btn">
+          50 <img src="./public/icon_coin.png" class="btn-coin-icon">
+        </button>
       </div>
       <div class="shop-item">
         <div class="shop-info">
           <h3>Броня</h3>
           <p>+10 к макс. HP</p>
         </div>
-        <button id="buyHpBtn" class="buy-btn">100 🪙</button>
+        <button id="buyHpBtn" class="buy-btn">
+          100 <img src="./public/icon_coin.png" class="btn-coin-icon">
+        </button>
       </div>
       <div class="shop-item">
         <div class="shop-info">
           <h3>Кибер-имплант</h3>
           <p>+1 монета в секунду</p>
         </div>
-        <button id="buyAutoBtn" class="buy-btn">150 🪙</button>
+        <button id="buyAutoBtn" class="buy-btn">
+          150 <img src="./public/icon_coin.png" class="btn-coin-icon">
+        </button>
       </div>
     </main>
 
+    <!-- РЕЙТИНГ (эмодзи заменены на картинку) -->
     <main class="main-content hidden" id="screen-rating">
       <div class="rating-card">
         <p>Текущий баланс:</p>
-        <h3><span id="currentCoins">0</span> 🪙</h3>
+        <h3><span id="currentCoins">0</span> <img src="./public/icon_coin.png" class="rating-coin-icon"></h3>
       </div>
       <div class="rating-card">
         <p>Твой рекорд:</p>
-        <h3><span id="highScore">0</span> 🪙</h3>
+        <h3><span id="highScore">0</span> <img src="./public/icon_coin.png" class="rating-coin-icon"></h3>
       </div>
       <button id="shareBtn" class="share-btn">📣 Похвастаться</button>
       <button id="resetBtn" class="reset-btn">🗑 Сбросить прогресс</button>
@@ -112,6 +115,6 @@
     </nav>
   </div>
   
-  <script src="game.js?v=22"></script>
+  <script src="game.js?v=23"></script>
 </body>
 </html>
