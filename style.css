@@ -15,14 +15,13 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Фон для боя */
 .battle-background {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background-image: url('./public/bg.png');
   background-size: cover;
   background-position: center;
-  opacity: 0.4;
+  opacity: 0.6;
   z-index: 1;
 }
 
@@ -32,7 +31,7 @@ body {
   height: 100%;
   width: 100%;
   position: relative;
-  z-index: 2; /* Выше фона боя */
+  z-index: 2;
 }
 
 .top-bar {
@@ -59,110 +58,37 @@ body {
 
 .hidden { display: none !important; }
 
-/* --- Боковые иконки на главном экране --- */
-.side-icons {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-}
-
-.side-icon {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  cursor: pointer;
-  background: rgba(46, 166, 255, 0.2);
-  border-radius: 15px;
-  padding: 8px;
-  border: 1px solid #2ea6ff;
-  transition: transform 0.1s;
-}
-
-.side-icon:active { transform: scale(0.9); }
-
-/* --- Кнопка В Бой (Иконка + Текст) --- */
-.battle-btn-container {
+/* --- Кнопка В Бой --- */
+.battle-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   background: #ff4a4a;
-  padding: 10px 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 0 #b83333;
-  cursor: pointer;
-  margin-bottom: 30px;
-  animation: pulse 2s infinite;
-}
-
-.battle-btn-container:active {
-  transform: translateY(4px);
-  box-shadow: none;
-}
-
-.battle-icon-btn {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.battle-text {
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 20px;
   font-size: 24px;
   font-weight: bold;
-  color: white;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-/* --- Питомец --- */
-.pet-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  filter: drop-shadow(0 0 25px rgba(46, 166, 255, 0.5));
-  position: relative;
   cursor: pointer;
+  box-shadow: 0 6px 0 #b83333;
+  margin-bottom: 40px;
+  transition: transform 0.1s;
+}
+.battle-btn:active { transform: translateY(6px); box-shadow: none; }
+.battle-icon { width: 32px; height: 32px; object-fit: contain; }
+
+/* --- Питомец (Главный экран) --- */
+.pet-container {
+  filter: drop-shadow(0 0 30px rgba(46, 166, 255, 0.6));
+  /* cursor: pointer; УБРАНО */
 }
 
 .pet-img {
-  width: 250px; 
-  height: 250px;
+  width: 320px; /* Увеличили */
+  height: 320px;
   object-fit: contain;
-  transition: transform 0.1s ease;
-}
-
-.pet-img:active, .pet-squash {
-  transform: scale(1.05, 0.9) translateY(10px);
-}
-
-/* --- Всплывающие цифры --- */
-#floating-numbers {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.floating-number {
-  position: absolute;
-  color: #2ea6ff;
-  font-size: 28px;
-  font-weight: bold;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-  animation: floatUp 0.8s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes floatUp {
-  0% { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-60px) scale(1.3); }
 }
 
 /* --- ЭКРАН БОЯ --- */
@@ -173,52 +99,41 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 80px; /* Место для кнопки назад */
+  padding-top: 10px;
+  padding-bottom: 20px;
 }
 
-.enemy-container {
+.enemy-container, .player-container {
   text-align: center;
-  margin-top: 20px;
+  position: relative;
 }
 
-.enemy-name { font-size: 20px; color: #ff4a4a; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px black; }
+.enemy-name { font-size: 22px; color: #ff4a4a; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px black; }
+
+.relative-wrapper {
+  position: relative;
+  display: inline-block;
+}
 
 .enemy-img {
-  width: 180px;
-  height: 180px;
+  width: 220px; /* Увеличили */
+  height: 220px;
   object-fit: contain;
-  filter: drop-shadow(0 0 15px rgba(255, 74, 74, 0.6));
+  filter: drop-shadow(0 0 20px rgba(255, 74, 74, 0.6));
   margin-top: 10px;
 }
 
-/* Анимация получения урона */
-.enemy-hit {
-  animation: shake 0.2s;
-}
-
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-10px) rotate(-5deg); }
-  50% { transform: translateX(10px) rotate(5deg); }
-  75% { transform: translateX(-10px); }
-  100% { transform: translateX(0); }
-}
-
-.player-container {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
 .battle-pet-img {
-  width: 140px;
-  height: 140px;
+  width: 220px; /* Увеличили */
+  height: 220px;
   object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(46, 166, 255, 0.6));
   margin-bottom: 5px;
-  filter: drop-shadow(0 0 15px rgba(46, 166, 255, 0.6));
 }
 
+/* Полоски здоровья */
 .health-bar-bg {
-  width: 250px;
+  width: 260px;
   height: 20px;
   background: #4a5b6b;
   border-radius: 10px;
@@ -227,137 +142,112 @@ body {
   border: 2px solid black;
 }
 
-.health-bar-fill {
-  height: 100%;
-  background: #ff4a4a;
-  transition: width 0.2s;
-}
-
+.health-bar-fill { height: 100%; background: #ff4a4a; transition: width 0.2s; }
 .health-bar-fill.player-hp { background: #31a24c; }
 
-#playerHpText { font-size: 16px; margin-top: 5px; color: white; font-weight: bold; }
+.hp-text { font-size: 16px; margin-top: 5px; color: white; font-weight: bold; text-shadow: 0 2px 4px black; }
 
-/* Кнопка Назад (Иконка) */
-.back-icon-btn {
+/* Контейнеры для цифр урона */
+.damage-container {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(33, 45, 59, 0.8);
-  border: 1px solid #ff4a4a;
-  padding: 15px;
-  border-radius: 50%;
-  cursor: pointer;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 10;
 }
 
-.back-icon {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-}
-
-/* --- ОВЕРЛЕИ (Магазин и Рейтинг) --- */
-.overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-}
-
-.overlay-content {
-  background: #212d3b;
-  width: 90%;
-  max-width: 400px;
-  border-radius: 20px;
-  padding: 20px;
-  position: relative;
-  border: 2px solid #2ea6ff;
-}
-
-.overlay-content h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #2ea6ff;
-}
-
-.close-overlay-btn {
+.floating-damage-player {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  background: transparent;
-  color: #ff4a4a;
-  border: none;
-  font-size: 24px;
+  color: #2ea6ff; /* Синий урон кота */
+  font-size: 32px;
   font-weight: bold;
-  cursor: pointer;
+  text-shadow: 0 2px 6px black;
+  animation: floatUpDmg 0.8s ease-out forwards;
 }
 
-/* Магазин */
+.floating-damage-enemy {
+  position: absolute;
+  color: #ff4a4a; /* Красный урон крысы */
+  font-size: 32px;
+  font-weight: bold;
+  text-shadow: 0 2px 6px black;
+  animation: floatUpDmg 0.8s ease-out forwards;
+}
+
+@keyframes floatUpDmg {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-60px) scale(1.3); }
+}
+
+/* Анимация вздрагивания */
+.hit-shake { animation: shake 0.2s; }
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-10px) rotate(-5deg); }
+  50% { transform: translateX(10px) rotate(5deg); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+/* --- МАГАЗИН / РЕЙТИНГ --- */
 .shop-item {
-  background: rgba(23, 33, 43, 0.6);
+  background: rgba(33, 45, 59, 0.9);
   width: 100%;
-  padding: 15px;
+  max-width: 400px;
+  padding: 20px;
   border-radius: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
-  border: 1px solid #2a3847;
+  margin-bottom: 15px;
+  border: 1px solid #2ea6ff;
 }
 
-.shop-info h3 { font-size: 18px; margin-bottom: 5px; }
-.shop-info p { color: #8e9fae; font-size: 13px; }
+.shop-info h3 { font-size: 20px; margin-bottom: 5px; }
+.shop-info p { color: #8e9fae; font-size: 14px; }
 
-.buy-btn {
-  background: #31a24c;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
+.buy-btn { background: #31a24c; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
 .buy-btn:disabled { background: #4a5b6b; color: #8e9fae; cursor: not-allowed; }
 
-/* Рейтинг */
-.rating-card {
-  background: rgba(23, 33, 43, 0.6);
-  width: 100%;
-  padding: 15px;
-  border-radius: 15px;
-  text-align: center;
-  margin-bottom: 15px;
-  border: 1px solid #2a3847;
-}
+.rating-card { background: rgba(33, 45, 59, 0.9); width: 100%; max-width: 300px; padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 15px; border: 1px solid #2a3847; }
 .rating-card p { color: #8e9fae; font-size: 14px; margin-bottom: 5px; }
 .rating-card h3 { font-size: 28px; color: white; }
 
-.share-btn {
-  background: #2ea6ff;
-  color: white;
-  border: none;
-  padding: 15px;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom: 10px;
+.share-btn { background: #2ea6ff; color: white; border: none; padding: 15px 30px; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; max-width: 300px; }
+.reset-btn { background: transparent; color: #ff4a4a; border: 1px solid #ff4a4a; padding: 10px 20px; border-radius: 10px; font-size: 14px; margin-top: 20px; cursor: pointer; }
+
+/* --- НИЖНЯЯ НАВИГАЦИЯ --- */
+.bottom-nav {
+  display: flex;
+  background: rgba(28, 39, 51, 0.95);
+  border-top: 1px solid #2a3847;
+  height: 75px;
+  z-index: 20;
 }
 
-.reset-btn {
+.nav-btn {
+  flex: 1;
   background: transparent;
-  color: #ff4a4a;
-  border: 1px solid #ff4a4a;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 14px;
-  width: 100%;
+  border: none;
+  color: #8e9fae;
+  font-size: 12px;
+  font-weight: bold;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
 }
+
+.nav-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.nav-btn.active { color: #2ea6ff; border-top: 3px solid #2ea6ff; }
+.nav-btn.active .nav-icon { opacity: 1; }
