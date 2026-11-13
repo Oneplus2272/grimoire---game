@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Мой Питомец</title>
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -17,20 +17,28 @@
 
     <!-- ЭКРАН 1: Игра -->
     <main class="main-content" id="screen-game">
-      <div class="pet-container">
+      <div class="pet-container" id="petContainer">
         <img src="./public/pet.png" id="petImage" alt="Кибер-Кот" class="pet-img">
+        <!-- Контейнер для всплывающих цифр -->
+        <div id="floating-numbers"></div>
       </div>
       <button id="tapBtn">Тапнуть</button>
     </main>
 
     <!-- ЭКРАН 2: Магазин -->
     <main class="main-content hidden" id="screen-shop">
+      <!-- Переключатель режима покупки -->
+      <div class="buy-mode-toggle">
+        <button id="buyModeX1" class="mode-btn active">x1</button>
+        <button id="buyModeMax" class="mode-btn">MAX</button>
+      </div>
+
       <div class="shop-item">
         <div class="shop-info">
           <h3>Мощный палец</h3>
           <p>+1 к клику</p>
         </div>
-        <button id="buyPowerBtn">50 🪙</button>
+        <button id="buyPowerBtn" class="buy-btn">50 🪙</button>
       </div>
       <p id="powerLevel" class="stats">Сила клика: 1</p>
 
@@ -39,7 +47,7 @@
           <h3>Кибер-имплант</h3>
           <p>+1 монета в секунду</p>
         </div>
-        <button id="buyAutoBtn">100 🪙</button>
+        <button id="buyAutoBtn" class="buy-btn">100 🪙</button>
       </div>
       <p id="autoLevel" class="stats">Автоклик: 0/сек</p>
     </main>
@@ -69,6 +77,6 @@
     </nav>
   </div>
   
-  <script src="game.js?v=8"></script>
+  <script src="game.js?v=9"></script>
 </body>
 </html>
