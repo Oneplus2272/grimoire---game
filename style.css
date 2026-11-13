@@ -6,7 +6,7 @@
 
 body {
   font-family: sans-serif;
-  background-color: #17212b;
+  background-color: #17212b; /* Базовый фон для магазина и рейтинга */
   color: white;
   height: 100vh;
   width: 100vw;
@@ -15,20 +15,10 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Класс для скрытия интерфейса во время боя */
+/* Скрываем интерфейс в бою */
 body.hide-ui .top-bar,
 body.hide-ui .bottom-nav {
   display: none !important;
-}
-
-.battle-background {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-image: url('./public/bg.png');
-  background-size: cover;
-  background-position: center;
-  opacity: 0.6;
-  z-index: 1;
 }
 
 .app {
@@ -51,6 +41,7 @@ body.hide-ui .bottom-nav {
 .top-bar h1 { font-size: 26px; font-weight: bold; }
 .income-text { font-size: 14px; color: #8e9fae; margin-top: 5px; }
 
+/* --- ЭКРАНЫ И ФОНЫ --- */
 .main-content {
   flex: 1;
   display: flex;
@@ -60,6 +51,22 @@ body.hide-ui .bottom-nav {
   padding: 20px;
   overflow-y: auto;
   position: relative;
+}
+
+/* Фон главного экрана */
+#screen-game {
+  background-image: url('./public/main_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Фон экрана боя */
+#screen-battle {
+  background-image: url('./public/bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hidden { display: none !important; }
@@ -81,6 +88,7 @@ body.hide-ui .bottom-nav {
   box-shadow: 0 6px 0 #b83333;
   margin-bottom: 40px;
   transition: transform 0.1s;
+  z-index: 10; /* Чтобы кнопка была над фоном */
 }
 .battle-btn:active { transform: translateY(6px); box-shadow: none; }
 
@@ -93,6 +101,7 @@ body.hide-ui .bottom-nav {
 /* --- Питомец (Главный экран) --- */
 .pet-container {
   filter: drop-shadow(0 0 30px rgba(46, 166, 255, 0.6));
+  z-index: 10;
 }
 
 .pet-img {
@@ -109,8 +118,8 @@ body.hide-ui .bottom-nav {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding-top: 40px; /* Добавили отступ сверху, так как шапки больше нет */
-  padding-bottom: 40px; /* И снизу */
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .enemy-container, .player-container {
